@@ -1,0 +1,203 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bàn học của Nyna</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#3E7A54">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Bàn học">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --paper:#F6F7F0; --paper-alt:#EBEEE0; --ink:#202B21; --ink-soft:#4B5A4C;
+    --moss:#3E7A54; --moss-deep:#2C5A3E; --berry:#8E3B55; --berry-tint:#F1D9E1;
+    --gold:#B07F23; --gold-tint:#F3E3C2; --line:#DADFCB; --sky:#3A6B8E; --sky-tint:#D9E6F1;
+    --chip-empty:#E3E7D6;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#121a13; --paper-alt:#1a231b; --ink:#E8ECE2; --ink-soft:#AEBBAA;
+      --moss:#7FC499; --moss-deep:#A8DAB8; --berry:#E39FB1; --berry-tint:#3A2530;
+      --gold:#E3B65C; --gold-tint:#3A2F19; --line:#2B362B; --sky:#8FB8D8; --sky-tint:#1E2B36;
+      --chip-empty:#243024;
+    }
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; min-height:100vh; background:var(--paper); color:var(--ink);
+    font-family:'Be Vietnam Pro',-apple-system,'Segoe UI',Roboto,sans-serif; line-height:1.6;
+    display:flex; flex-direction:column; align-items:center; padding:2.2rem 1.2rem 3rem;
+  }
+  h1,h2,h3{font-family:'Fredoka',ui-rounded,'Segoe UI Rounded',system-ui,sans-serif;font-weight:600;margin:0;}
+  .eyebrow{font-size:0.78rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--moss);}
+  h1{font-size:clamp(1.7rem,4.5vw,2.4rem);margin:0.15rem 0 0.2rem;}
+  .greet{color:var(--ink-soft);font-size:0.95rem;margin:0 0 1.8rem;text-align:center;}
+  .desk{display:grid;grid-template-columns:repeat(3,minmax(260px,330px));gap:1.1rem;width:100%;max-width:1060px;justify-content:center;align-items:stretch;}
+  @media (max-width:920px){ .desk{grid-template-columns:minmax(260px,460px);} }
+  .subject{
+    display:flex;flex-direction:column;gap:0.65rem;text-decoration:none;color:var(--ink);
+    background:var(--paper-alt);border:1.5px solid var(--line);border-radius:18px;padding:1.2rem 1.2rem 1.05rem;
+    transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+  }
+  .subject:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 6px 18px rgba(0,0,0,0.07);}
+  .subject:focus-visible{outline:3px solid var(--gold);outline-offset:3px;}
+  .s-head{display:flex;align-items:center;gap:0.7rem;}
+  .s-head .s-go{margin:0 0 0 auto;align-self:center;}
+  .s-icon{width:48px;height:48px;min-width:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--tint);color:var(--accent);}
+  .s-icon svg{width:28px;height:28px;}
+  .s-title{font-size:1.2rem;line-height:1.2;}
+  .s-sub{font-size:0.76rem;color:var(--ink-soft);margin-top:0.05rem;}
+  .s-total{display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:var(--ink-soft);}
+  .s-total b{color:var(--ink);}
+  .s-total .pct{margin-left:auto;font-family:'Fredoka',sans-serif;font-weight:600;color:var(--accent);font-size:0.95rem;}
+  .bar{height:7px;border-radius:99px;background:var(--chip-empty);overflow:hidden;}
+  .bar i{display:block;height:100%;width:0;border-radius:99px;background:var(--accent);transition:width .6s ease;}
+  .chapters{display:flex;flex-direction:column;gap:0.45rem;margin-top:0.1rem;flex:1;}
+  .ch-row{display:flex;align-items:center;gap:0.5rem;}
+  .ch-label{
+    width:22px;height:22px;min-width:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;
+    font-family:'Fredoka',sans-serif;font-weight:600;font-size:0.74rem;background:var(--tint);color:var(--accent);
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:0.28rem;flex:1;}
+  .chip{
+    width:17px;height:17px;border-radius:5px;background:var(--chip-empty);position:relative;overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .chip i{position:absolute;left:0;right:0;bottom:0;height:0;background:var(--accent);opacity:0.55;transition:height .5s ease;}
+  .chip.done{background:var(--accent);border-color:var(--accent);}
+  .chip.done i{display:none;}
+  .chip.done::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--paper);font-size:0.62rem;font-weight:700;}
+  .ch-pct{width:38px;text-align:right;font-size:0.72rem;font-weight:600;color:var(--ink-soft);font-variant-numeric:tabular-nums;}
+  .s-go{font-family:'Fredoka',sans-serif;font-weight:600;font-size:0.84rem;color:var(--paper);background:var(--accent);padding:0.4rem 0.9rem;border-radius:999px;white-space:nowrap;}
+  .math{--accent:var(--sky);--tint:var(--sky-tint);}
+  .science{--accent:var(--moss);--tint:#E4EEE3;}
+  @media (prefers-color-scheme: dark){ .science{--tint:#1E3324;} }
+  .esl{--accent:var(--berry);--tint:var(--berry-tint);}
+  .foot{margin-top:2rem;font-size:0.78rem;color:var(--ink-soft);text-align:center;max-width:620px;}
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+  .build-stamp{display:block;margin-top:0.4rem;opacity:0.7;font-variant-numeric:tabular-nums;}
+</style>
+
+<p class="eyebrow">Cambridge · N / NKBN</p>
+<h1>Bàn học của Nyna 🌱</h1>
+<p class="greet" id="greet">Hôm nay con muốn học môn nào?</p>
+
+<div class="desk">
+  <a class="subject math" href="Math_Xu_4.html" data-subj="math">
+    <div class="s-head">
+      <span class="s-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="8" y2="11.01"/><line x1="12" y1="11" x2="12" y2="11.01"/><line x1="16" y1="11" x2="16" y2="11.01"/><line x1="8" y1="15" x2="8" y2="15.01"/><line x1="12" y1="15" x2="12" y2="15.01"/><line x1="16" y1="15" x2="16" y2="15.01"/><line x1="8" y1="19" x2="8" y2="19.01"/><line x1="12" y1="19" x2="12" y2="19.01"/><line x1="16" y1="19" x2="16" y2="19.01"/></svg></span>
+      <div><h2 class="s-title">Toán</h2><p class="s-sub">Stage 5 · 16 mục</p></div>
+      <span class="s-go">Vào học ›</span>
+    </div>
+    <div class="s-total"><span>Xong trọn vẹn: <b data-done>0</b> mục</span><span class="pct" data-pct>0%</span></div>
+    <div class="bar"><i data-bar></i></div>
+    <div class="chapters" data-chapters></div>
+  </a>
+
+  <a class="subject science" href="Science_4.html" data-subj="science">
+    <div class="s-head">
+      <span class="s-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v6.5L4.5 18a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 8.5V2"/><line x1="8" y1="2" x2="16" y2="2"/><line x1="7.5" y1="14" x2="16.5" y2="14"/></svg></span>
+      <div><h2 class="s-title">Khoa học</h2><p class="s-sub">Stage 5 · 28 mục</p></div>
+      <span class="s-go">Vào học ›</span>
+    </div>
+    <div class="s-total"><span>Xong trọn vẹn: <b data-done>0</b> mục</span><span class="pct" data-pct>0%</span></div>
+    <div class="bar"><i data-bar></i></div>
+    <div class="chapters" data-chapters></div>
+  </a>
+
+  <a class="subject esl" href="ESL_Xu_4.html" data-subj="esl">
+    <div class="s-head">
+      <span class="s-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg></span>
+      <div><h2 class="s-title">Tiếng Anh</h2><p class="s-sub">Book 5 · 57 mục</p></div>
+      <span class="s-go">Vào học ›</span>
+    </div>
+    <div class="s-total"><span>Xong trọn vẹn: <b data-done>0</b> mục</span><span class="pct" data-pct>0%</span></div>
+    <div class="bar"><i data-bar></i></div>
+    <div class="chapters" data-chapters></div>
+  </a>
+</div>
+
+<p class="foot">Mỗi ô vuông là một mục (1.1, 1.2, …) — ô đầy dần theo phần con đã làm trong mục đó (luyện tập + 3 cấp từ vựng + 5 đề = 9 phần), đầy 100% thì hiện ✓. Đặt file này cùng thư mục với <b>Math_Xu_4.html</b>, <b>Science_4.html</b> và <b>ESL_Xu_4.html</b>. <span class="build-stamp">Bản dựng · 27/08/2026 16:25 (GMT+7)</span></p>
+
+<script>
+(function(){
+  "use strict";
+  var CFG = {"math": {"prefix": "xuxu-math-", "paper": "ut", "chapters": [["1", "Number", [[1, "1.1"], [2, "1.2"], [3, "1.3"], [4, "1.4"]]], ["2", "Geometry & Measurement", [[5, "2.1"], [6, "2.2"], [7, "2.3"], [8, "2.4"]]], ["3", "Statistics & Probability", [[9, "3.1"], [10, "3.2"], [11, "3.3"], [12, "3.4"], [13, "3.5"], [14, "3.6"], [15, "3.7"], [16, "3.8"]]]]}, "science": {"prefix": "xuxu-science5-", "paper": "ut", "chapters": [["1", "Flowering plants", [[1, "1.1"], [2, "1.2"], [3, "1.3"], [4, "1.4"], [5, "1.5"]]], ["2", "Sound", [[6, "2.1"], [7, "2.2"], [8, "2.3"], [9, "2.4"], [10, "2.5"]]], ["3", "States of matter", [[11, "3.1"], [12, "3.2"], [13, "3.3"], [14, "3.4"]]], ["4", "The digestive system", [[15, "4.1"], [16, "4.2"], [17, "4.3"], [18, "4.4"]]], ["5", "Forces and magnetism", [[19, "5.1"], [20, "5.2"], [21, "5.3"], [22, "5.4"], [23, "5.5"]]], ["6", "Seasons and adaptation", [[24, "6.1"], [25, "6.2"], [26, "6.3"], [27, "6.4"], [28, "6.5"]]]]}, "esl": {"prefix": "xuxu-esl5-", "paper": "testu", "chapters": [["1", "Talking about people", [[1, "1.1"], [2, "1.2"], [3, "1.3"], [4, "1.4"], [5, "1.5"], [6, "1.6"], [7, "1.7"], [8, "1.8"]]], ["2", "Food and health", [[9, "2.1"], [10, "2.2"], [11, "2.3"], [12, "2.4"], [13, "2.5"], [14, "2.6"], [15, "2.7"]]], ["3", "Places", [[16, "3.1"], [17, "3.2"], [18, "3.3"], [19, "3.4"], [20, "3.5"], [21, "3.6"], [22, "3.7"]]], ["4", "Special occasions", [[23, "4.1"], [24, "4.2"], [25, "4.3"], [26, "4.4"], [27, "4.5"]]], ["5", "Our brains", [[28, "5.1"], [29, "5.2"], [30, "5.3"], [31, "5.4"], [32, "5.5"], [33, "5.6"]]], ["6", "Great stories", [[34, "6.1"], [35, "6.2"], [36, "6.3"], [37, "6.4"], [38, "6.5"], [39, "6.6"], [40, "6.7"]]], ["7", "Ancient Rome and Egypt", [[41, "7.1"], [42, "7.2"], [43, "7.3"], [44, "7.4"], [45, "7.5"]]], ["8", "Rainforests", [[46, "8.1"], [47, "8.2"], [48, "8.3"], [49, "8.4"], [50, "8.5"], [51, "8.6"], [52, "8.7"]]], ["9", "Animal kingdom", [[53, "9.1"], [54, "9.2"], [55, "9.3"], [56, "9.4"], [57, "9.5"]]]]}};
+  function attempted(prefix, id){
+    try{
+      var raw = localStorage.getItem(prefix + id);
+      if(!raw) return false;
+      var st = JSON.parse(raw);
+      if(!st) return false;
+      if(st.attempts > 0) return true;
+      if(st.firstAttempt && Object.keys(st.firstAttempt).length) return true;
+      if(st.values && Object.keys(st.values).length) return true;
+    }catch(e){}
+    return false;
+  }
+  function lessonPct(cfg, n){
+    var ids = ['u'+n, 'vocab'+n+'l1', 'vocab'+n+'l2', 'vocab'+n+'l3'];
+    for(var k=1;k<=5;k++) ids.push(cfg.paper + n + 'p' + k);
+    var done = 0;
+    ids.forEach(function(id){ if(attempted(cfg.prefix, id)) done++; });
+    return done / ids.length;
+  }
+  Object.keys(CFG).forEach(function(key){
+    var cfg = CFG[key];
+    var card = document.querySelector('[data-subj="'+key+'"]');
+    if(!card) return;
+    var box = card.querySelector('[data-chapters]');
+    var sum = 0, count = 0, full = 0;
+    cfg.chapters.forEach(function(chap){
+      var label = chap[0], name = chap[1], lessons = chap[2];
+      var row = document.createElement('div');
+      row.className = 'ch-row';
+      var lbl = document.createElement('span');
+      lbl.className = 'ch-label';
+      lbl.textContent = label;
+      lbl.title = 'Chương ' + label + ' · ' + name;
+      row.appendChild(lbl);
+      var chips = document.createElement('div');
+      chips.className = 'chips';
+      var chSum = 0;
+      lessons.forEach(function(ls){
+        var n = ls[0], num = ls[1];
+        var p = lessonPct(cfg, n);
+        chSum += p; sum += p; count++;
+        if(p >= 0.999) full++;
+        var chip = document.createElement('span');
+        chip.className = 'chip' + (p >= 0.999 ? ' done' : '');
+        chip.title = 'Mục ' + num + ' — ' + Math.round(p*100) + '%';
+        var fill = document.createElement('i');
+        chips.appendChild(chip);
+        chip.appendChild(fill);
+        (function(f, pct){ requestAnimationFrame(function(){ f.style.height = Math.round(pct*100) + '%'; }); })(fill, p);
+      });
+      row.appendChild(chips);
+      var pctEl = document.createElement('span');
+      pctEl.className = 'ch-pct';
+      pctEl.textContent = Math.round(chSum / lessons.length * 100) + '%';
+      row.appendChild(pctEl);
+      box.appendChild(row);
+    });
+    var overall = count ? sum / count : 0;
+    card.querySelector('[data-done]').textContent = full;
+    card.querySelector('[data-pct]').textContent = Math.round(overall*100) + '%';
+    var bar = card.querySelector('[data-bar]');
+    requestAnimationFrame(function(){ bar.style.width = Math.round(overall*100) + '%'; });
+  });
+  var h = new Date().getHours();
+  var g = h < 11 ? 'Chào buổi sáng' : h < 14 ? 'Chào buổi trưa' : h < 18 ? 'Chào buổi chiều' : 'Chào buổi tối';
+  document.getElementById('greet').textContent = g + ', Nyna! Hôm nay con muốn học môn nào?';
+})();
+</script>
+<script>
+/* Offline support: only when served over http(s) (GitHub Pages, local server…).
+   Opening the file directly (file://) is unaffected. */
+if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
+  navigator.serviceWorker.register('sw.js').catch(function(){});
+}
+</script>
