@@ -35,8 +35,9 @@
   .eyebrow{font-size:0.78rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--moss);}
   h1{font-size:clamp(1.7rem,4.5vw,2.4rem);margin:0.15rem 0 0.2rem;}
   .greet{color:var(--ink-soft);font-size:0.95rem;margin:0 0 1.8rem;text-align:center;}
-  .desk{display:grid;grid-template-columns:repeat(3,minmax(260px,330px));gap:1.1rem;width:100%;max-width:1060px;justify-content:center;align-items:stretch;}
-  @media (max-width:920px){ .desk{grid-template-columns:minmax(260px,460px);} }
+  .desk{display:grid;grid-template-columns:repeat(4,minmax(225px,285px));gap:1.1rem;width:100%;max-width:1060px;justify-content:center;align-items:stretch;}
+  @media (max-width:1220px){ .desk{grid-template-columns:repeat(2,minmax(250px,380px));} }
+  @media (max-width:680px){ .desk{grid-template-columns:minmax(250px,460px);} }
   .subject{
     display:flex;flex-direction:column;gap:0.65rem;text-decoration:none;color:var(--ink);
     background:var(--paper-alt);border:1.5px solid var(--line);border-radius:18px;padding:1.2rem 1.2rem 1.05rem;
@@ -48,7 +49,7 @@
   .s-head .s-go{margin:0 0 0 auto;align-self:center;}
   .s-icon{width:48px;height:48px;min-width:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:var(--tint);color:var(--accent);}
   .s-icon svg{width:28px;height:28px;}
-  .s-title{font-size:1.2rem;line-height:1.2;}
+  .s-title{font-size:1.08rem;line-height:1.2;white-space:nowrap;}
   .s-sub{font-size:0.76rem;color:var(--ink-soft);margin-top:0.05rem;}
   .s-total{display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:var(--ink-soft);}
   .s-total b{color:var(--ink);}
@@ -71,11 +72,12 @@
   .chip.done i{display:none;}
   .chip.done::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--paper);font-size:0.62rem;font-weight:700;}
   .ch-pct{width:38px;text-align:right;font-size:0.72rem;font-weight:600;color:var(--ink-soft);font-variant-numeric:tabular-nums;}
-  .s-go{font-family:'Fredoka',sans-serif;font-weight:600;font-size:0.84rem;color:var(--paper);background:var(--accent);padding:0.4rem 0.9rem;border-radius:999px;white-space:nowrap;}
+  .s-go{font-family:'Fredoka',sans-serif;font-weight:600;font-size:0.8rem;color:var(--paper);background:var(--accent);padding:0.36rem 0.75rem;border-radius:999px;white-space:nowrap;}
   .math{--accent:var(--sky);--tint:var(--sky-tint);}
   .science{--accent:var(--moss);--tint:#E4EEE3;}
   @media (prefers-color-scheme: dark){ .science{--tint:#1E3324;} }
   .esl{--accent:var(--berry);--tint:var(--berry-tint);}
+  .ict{--accent:var(--gold);--tint:var(--gold-tint);}
   .foot{margin-top:2rem;font-size:0.78rem;color:var(--ink-soft);text-align:center;max-width:620px;}
   @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
   .build-stamp{display:block;margin-top:0.4rem;opacity:0.7;font-variant-numeric:tabular-nums;}
@@ -118,14 +120,25 @@
     <div class="bar"><i data-bar></i></div>
     <div class="chapters" data-chapters></div>
   </a>
+  <a class="subject ict" href="ICT_Xu_4.html" data-subj="ict">
+    <div class="s-head">
+      <span class="s-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
+      <div><h2 class="s-title">Tin học</h2><p class="s-sub">Year 4 · 6 mục</p></div>
+      <span class="s-go">Vào học ›</span>
+    </div>
+    <div class="s-total"><span>Xong trọn vẹn: <b data-done>0</b> mục</span><span class="pct" data-pct>0%</span></div>
+    <div class="bar"><i data-bar></i></div>
+    <div class="chapters" data-chapters></div>
+  </a>
+
 </div>
 
-<p class="foot">Mỗi ô vuông là một mục (1.1, 1.2, …) — ô đầy dần theo phần con đã làm trong mục đó (luyện tập + 3 cấp từ vựng + 5 đề = 9 phần), đầy 100% thì hiện ✓. Đặt file này cùng thư mục với <b>Math_Xu_4.html</b>, <b>Science_4.html</b> và <b>ESL_Xu_4.html</b>. <span class="build-stamp">Bản dựng · 27/08/2026 16:25 (GMT+7)</span></p>
+<p class="foot">Mỗi ô vuông là một mục (1.1, 1.2, …) — ô đầy dần theo phần con đã làm trong mục đó (luyện tập + 3 cấp từ vựng + 5 đề = 9 phần), đầy 100% thì hiện ✓. Đặt file này cùng thư mục với <b>Math_Xu_4.html</b>, <b>Science_4.html</b> và <b>ESL_Xu_4.html</b> và <b>ICT_Xu_4.html</b>. <span class="build-stamp">Bản dựng · 28/08/2026 09:12 (GMT+7)</span></p>
 
 <script>
 (function(){
   "use strict";
-  var CFG = {"math": {"prefix": "xuxu-math-", "paper": "ut", "chapters": [["1", "Number", [[1, "1.1"], [2, "1.2"], [3, "1.3"], [4, "1.4"]]], ["2", "Geometry & Measurement", [[5, "2.1"], [6, "2.2"], [7, "2.3"], [8, "2.4"]]], ["3", "Statistics & Probability", [[9, "3.1"], [10, "3.2"], [11, "3.3"], [12, "3.4"], [13, "3.5"], [14, "3.6"], [15, "3.7"], [16, "3.8"]]]]}, "science": {"prefix": "xuxu-science5-", "paper": "ut", "chapters": [["1", "Flowering plants", [[1, "1.1"], [2, "1.2"], [3, "1.3"], [4, "1.4"], [5, "1.5"]]], ["2", "Sound", [[6, "2.1"], [7, "2.2"], [8, "2.3"], [9, "2.4"], [10, "2.5"]]], ["3", "States of matter", [[11, "3.1"], [12, "3.2"], [13, "3.3"], [14, "3.4"]]], ["4", "The digestive system", [[15, "4.1"], [16, "4.2"], [17, "4.3"], [18, "4.4"]]], ["5", "Forces and magnetism", [[19, "5.1"], [20, "5.2"], [21, "5.3"], [22, "5.4"], [23, "5.5"]]], ["6", "Seasons and adaptation", [[24, "6.1"], [25, "6.2"], [26, "6.3"], [27, "6.4"], [28, "6.5"]]]]}, "esl": {"prefix": "xuxu-esl5-", "paper": "testu", "chapters": [["1", "Talking about people", [[1, "1.1"], [2, "1.2"], [3, "1.3"], [4, "1.4"], [5, "1.5"], [6, "1.6"], [7, "1.7"], [8, "1.8"]]], ["2", "Food and health", [[9, "2.1"], [10, "2.2"], [11, "2.3"], [12, "2.4"], [13, "2.5"], [14, "2.6"], [15, "2.7"]]], ["3", "Places", [[16, "3.1"], [17, "3.2"], [18, "3.3"], [19, "3.4"], [20, "3.5"], [21, "3.6"], [22, "3.7"]]], ["4", "Special occasions", [[23, "4.1"], [24, "4.2"], [25, "4.3"], [26, "4.4"], [27, "4.5"]]], ["5", "Our brains", [[28, "5.1"], [29, "5.2"], [30, "5.3"], [31, "5.4"], [32, "5.5"], [33, "5.6"]]], ["6", "Great stories", [[34, "6.1"], [35, "6.2"], [36, "6.3"], [37, "6.4"], [38, "6.5"], [39, "6.6"], [40, "6.7"]]], ["7", "Ancient Rome and Egypt", [[41, "7.1"], [42, "7.2"], [43, "7.3"], [44, "7.4"], [45, "7.5"]]], ["8", "Rainforests", [[46, "8.1"], [47, "8.2"], [48, "8.3"], [49, "8.4"], [50, "8.5"], [51, "8.6"], [52, "8.7"]]], ["9", "Animal kingdom", [[53, "9.1"], [54, "9.2"], [55, "9.3"], [56, "9.4"], [57, "9.5"]]]]}};
+  var CFG = {"math": {"prefix": "xuxu-math-", "paper": "ut", "chapters": [["1", "Number", [[1, "1.1"], [2, "1.2"], [3, "1.3"], [4, "1.4"]]], ["2", "Geometry & Measurement", [[5, "2.1"], [6, "2.2"], [7, "2.3"], [8, "2.4"]]], ["3", "Statistics & Probability", [[9, "3.1"], [10, "3.2"], [11, "3.3"], [12, "3.4"], [13, "3.5"], [14, "3.6"], [15, "3.7"], [16, "3.8"]]]]}, "science": {"prefix": "xuxu-science5-", "paper": "ut", "chapters": [["1", "Flowering plants", [[1, "1.1"], [2, "1.2"], [3, "1.3"], [4, "1.4"], [5, "1.5"]]], ["2", "Sound", [[6, "2.1"], [7, "2.2"], [8, "2.3"], [9, "2.4"], [10, "2.5"]]], ["3", "States of matter", [[11, "3.1"], [12, "3.2"], [13, "3.3"], [14, "3.4"]]], ["4", "The digestive system", [[15, "4.1"], [16, "4.2"], [17, "4.3"], [18, "4.4"]]], ["5", "Forces and magnetism", [[19, "5.1"], [20, "5.2"], [21, "5.3"], [22, "5.4"], [23, "5.5"]]], ["6", "Seasons and adaptation", [[24, "6.1"], [25, "6.2"], [26, "6.3"], [27, "6.4"], [28, "6.5"]]]]}, "ict": {"prefix": "xuxu-ict-", "paper": "ut", "chapters": [["IT", "ICT Year 4", [[1, "1"], [2, "2"], [3, "3"], [4, "4"], [5, "5"], [6, "6"]]]]}, "esl": {"prefix": "xuxu-esl5-", "paper": "testu", "chapters": [["1", "Talking about people", [[1, "1.1"], [2, "1.2"], [3, "1.3"], [4, "1.4"], [5, "1.5"], [6, "1.6"], [7, "1.7"], [8, "1.8"]]], ["2", "Food and health", [[9, "2.1"], [10, "2.2"], [11, "2.3"], [12, "2.4"], [13, "2.5"], [14, "2.6"], [15, "2.7"]]], ["3", "Places", [[16, "3.1"], [17, "3.2"], [18, "3.3"], [19, "3.4"], [20, "3.5"], [21, "3.6"], [22, "3.7"]]], ["4", "Special occasions", [[23, "4.1"], [24, "4.2"], [25, "4.3"], [26, "4.4"], [27, "4.5"]]], ["5", "Our brains", [[28, "5.1"], [29, "5.2"], [30, "5.3"], [31, "5.4"], [32, "5.5"], [33, "5.6"]]], ["6", "Great stories", [[34, "6.1"], [35, "6.2"], [36, "6.3"], [37, "6.4"], [38, "6.5"], [39, "6.6"], [40, "6.7"]]], ["7", "Ancient Rome and Egypt", [[41, "7.1"], [42, "7.2"], [43, "7.3"], [44, "7.4"], [45, "7.5"]]], ["8", "Rainforests", [[46, "8.1"], [47, "8.2"], [48, "8.3"], [49, "8.4"], [50, "8.5"], [51, "8.6"], [52, "8.7"]]], ["9", "Animal kingdom", [[53, "9.1"], [54, "9.2"], [55, "9.3"], [56, "9.4"], [57, "9.5"]]]]}};
   function attempted(prefix, id){
     try{
       var raw = localStorage.getItem(prefix + id);
