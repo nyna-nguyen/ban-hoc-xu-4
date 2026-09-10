@@ -601,6 +601,44 @@
   .home-link:hover{border-color:var(--moss);background:var(--paper-alt);}
 
   .build-stamp{font-size:0.62rem;color:var(--ink-soft);opacity:0.75;margin-top:0.1rem;font-variant-numeric:tabular-nums;}
+
+  .saved-subtabs{display:flex;gap:0.5rem;margin-bottom:1.1rem;flex-wrap:wrap;}
+  .saved-subtab{font-family:'Fredoka',sans-serif;font-weight:600;font-size:0.85rem;padding:0.5rem 0.95rem;border-radius:999px;border:1px solid var(--line);background:var(--paper-alt);color:var(--ink-soft);cursor:pointer;}
+  .saved-subtab.is-active{background:var(--moss);border-color:var(--moss);color:var(--paper);}
+  .saved-sub{display:none;}
+  .saved-sub.is-active{display:block;}
+  .coins-head{display:flex;align-items:center;gap:1.1rem;background:var(--paper-alt);border:1.5px solid var(--line);border-radius:14px;padding:0.9rem 1.1rem;margin-bottom:1rem;flex-wrap:wrap;}
+  .coins-balance-wrap{display:flex;align-items:baseline;gap:0.35rem;}
+  .coins-balance{font-family:'Fredoka',sans-serif;font-weight:700;font-size:2.1rem;color:var(--gold);line-height:1;}
+  .coins-lbl{font-size:0.8rem;color:var(--ink-soft);}
+  .coins-rules{margin:0;font-size:0.8rem;color:var(--ink-soft);flex:1;min-width:220px;}
+  .coin-row{display:flex;align-items:baseline;gap:0.6rem;padding:0.45rem 0.2rem;border-bottom:1px dashed var(--line);font-size:0.86rem;}
+  .coin-delta{font-family:'Fredoka',sans-serif;font-weight:700;min-width:2.6rem;text-align:right;}
+  .coin-delta.is-plus{color:var(--moss);}
+  .coin-delta.is-minus{color:var(--berry);}
+  .coin-txt{flex:1;min-width:0;}
+  .coin-when{font-size:0.72rem;color:var(--ink-soft);white-space:nowrap;}
+  .coin-empty{color:var(--ink-soft);font-size:0.88rem;}
+  .coin-badge{display:inline-flex;align-items:center;gap:0.35rem;font-family:'Fredoka',sans-serif;font-weight:700;font-size:0.9rem;color:var(--gold);background:var(--gold-tint);border:1px solid var(--gold);border-radius:999px;padding:0.22rem 0.7rem;white-space:nowrap;flex:none;}
+
+  .unit-topbar{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+
+  .coin-unit{border:1.5px solid var(--line);border-radius:12px;margin-bottom:0.6rem;background:var(--paper-alt);overflow:hidden;}
+  .coin-g-head{display:flex;align-items:center;gap:0.55rem;width:100%;text-align:left;border:0;background:none;cursor:pointer;padding:0.6rem 0.8rem;font:inherit;color:var(--ink);}
+  .coin-unit-head{font-family:'Fredoka',sans-serif;font-weight:600;}
+  .coin-muc{border-top:1px dashed var(--line);}
+  .coin-muc-head{padding:0.45rem 0.8rem 0.45rem 1.6rem;font-size:0.86rem;}
+  .coin-chev{display:inline-block;transition:transform .15s ease;color:var(--ink-soft);}
+  .coin-unit.is-open > .coin-g-head .coin-chev,.coin-muc.is-open > .coin-g-head .coin-chev{transform:rotate(90deg);}
+  .coin-g-label{flex:1;min-width:0;}
+  .coin-g-count{font-size:0.72rem;color:var(--ink-soft);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:0.05rem 0.5rem;}
+  .coin-g-net{font-family:'Fredoka',sans-serif;font-weight:700;min-width:2.6rem;text-align:right;}
+  .coin-g-net.is-plus{color:var(--moss);}
+  .coin-g-net.is-minus{color:var(--berry);}
+  .coin-g-body{display:none;}
+  .coin-unit.is-open > .coin-g-body,.coin-muc.is-open > .coin-g-body{display:block;}
+  .coin-unit .coin-row{padding-left:1.7rem;padding-right:0.8rem;border-bottom-style:dotted;}
+  .coin-muc .coin-row{padding-left:2.4rem;}
 </style>
 
 <style>
@@ -1051,9 +1089,9 @@
 
 <div class="app">
 <aside class="toc" id="toc" aria-label="Unit list">
-<div class="toc-top"><div class="toc-brand"><a class="home-link" href="Ban_hoc.html" title="Về Bàn học · Back to the desk"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg>Bàn học</a><span class="eyebrow">Cambridge Global English</span><h1>Book 5</h1><div class="build-stamp">Bản dựng · 06/09/2026 23:06 (GMT+7)</div></div><button type="button" class="toc-toggle" id="toc-toggle" aria-expanded="true" aria-label="Collapse unit list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button></div><ul class="toc-list" id="toc-list"></ul><div class="student-tag" id="student-tag"><span class="student-avatar" aria-hidden="true">N</span><div class="student-info"><span class="student-code">NKBN</span><span class="student-name">Nyna Nguyen</span></div></div></aside>
+<div class="toc-top"><div class="toc-brand"><a class="home-link" href="Ban_hoc.html" title="Về Bàn học · Back to the desk"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg>Bàn học</a><span class="eyebrow">Cambridge Global English</span><h1>Book 5</h1><div class="build-stamp">Bản dựng · 10/09/2026 15:59 (GMT+7)</div></div><button type="button" class="toc-toggle" id="toc-toggle" aria-expanded="true" aria-label="Collapse unit list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button></div><ul class="toc-list" id="toc-list"></ul><div class="student-tag" id="student-tag"><span class="student-avatar" aria-hidden="true">N</span><div class="student-info"><span class="student-code">NKBN</span><span class="student-name">Nyna Nguyen</span></div></div></aside>
 <div class="main">
-<div class="unit-topbar" id="unit-topbar"><div><span class="eyebrow" id="topbar-eyebrow">Unit 1.1</span><h2 id="topbar-title">Opposite adjectives</h2></div></div>
+<div class="unit-topbar" id="unit-topbar"><div><span class="eyebrow" id="topbar-eyebrow">Unit 1.1</span><h2 id="topbar-title">Opposite adjectives</h2></div><span class="coin-badge" id="coin-badge" title="Coins"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="var(--gold)"/><circle cx="12" cy="12" r="7" fill="none" stroke="var(--gold-tint)" stroke-width="1.5"/><text x="12" y="16" text-anchor="middle" font-size="10" font-weight="700" fill="var(--gold-tint)">C</text></svg><span id="coin-n">50</span></span></div>
 <div class="tab-bar" id="tab-bar"><button class="tab-btn is-active" data-tab="learn">Learn</button><button class="tab-btn" data-tab="vocab">Vocabulary</button><button class="tab-btn" data-tab="reference">Reference</button><button class="tab-btn" data-tab="test">Comprehensive Test</button><button class="tab-btn" data-tab="results">Results</button><button class="tab-btn" data-tab="saved">Notes <span aria-hidden="true">★</span></button><button class="tab-btn" data-tab="backup">Backup</button></div>
 <div class="view-wrap">
 <div class="view is-active" data-view="learn" id="view-learn">
@@ -1985,8 +2023,21 @@
       <!-- ============ SAVED NOTES & FAVOURITES VIEW ============ -->
       <div class="view" data-view="saved" id="view-saved">
         <div class="results-wrap">
-          <div class="results-summary" id="saved-summary"></div>
-          <div id="saved-list"></div>
+          <div class="saved-subtabs" role="tablist">
+            <button type="button" class="saved-subtab is-active" data-ssub="coins">Coins <span aria-hidden="true">🪙</span></button>
+            <button type="button" class="saved-subtab" data-ssub="log">Interaction log <span aria-hidden="true">★</span></button>
+          </div>
+          <div class="saved-sub is-active" data-ssub="coins">
+            <div class="coins-head">
+              <div class="coins-balance-wrap"><span class="coins-balance" id="coins-balance">50</span><span class="coins-lbl">coins</span></div>
+              <p class="coins-rules">Correct <b>+10</b> · Hard question <b>+15</b> · Wrong <b>−5</b> · Resubmit fee <b>−5</b> — each question counts once. Newest first.</p>
+            </div>
+            <div id="coins-log"></div>
+          </div>
+          <div class="saved-sub" data-ssub="log">
+            <div class="results-summary" id="saved-summary"></div>
+            <div id="saved-list"></div>
+          </div>
         </div>
       </div>
 
@@ -5191,7 +5242,7 @@
     } else {
       var on = !!cfFavs[id];
       b.classList.toggle('is-on', on);
-      b.textContent = on ? '\u2605' : '\u2606';
+      b.textContent = on ? '★' : '\u2606';
     }
   }
   function cfUpdateById(id){
@@ -5976,6 +6027,135 @@
     }
   }
 
+  /* ---------- Coins (same rules as the Kiếm Xu app) ---------- */
+  var COIN_KEY = 'xuxu-esl5-coins';
+  var COIN_START = 50, COIN_WIN = 10, COIN_WIN_DEEP = 15, COIN_LOSE = 5, COIN_FEE = 5;
+  var coinState = {coins: COIN_START, judged: {}, log: []};
+  try{
+    var _c = JSON.parse(localStorage.getItem(COIN_KEY) || 'null');
+    if(_c && typeof _c.coins === 'number'){ coinState = _c; coinState.judged = coinState.judged || {}; coinState.log = coinState.log || []; }
+  }catch(e){}
+  function coinSave(){
+    try{ localStorage.setItem(COIN_KEY, JSON.stringify(coinState)); }catch(e){}
+    if(typeof touchDataStamp === 'function') touchDataStamp();
+  }
+  function coinBadge(){
+    var el = document.getElementById('coin-n');
+    if(el) el.textContent = coinState.coins;
+  }
+  function coinPlaceLabel(unitId){
+    var m, meta;
+    if(/^u\d+$/.test(unitId)){
+      meta = UNIT_META.filter(function(u){ return u.id === unitId; })[0];
+      return 'Practice ' + (meta ? meta.num : unitId);
+    }
+    if((m = unitId.match(/^(?:ut|testu)(\d+)p(\d+)$/))){
+      meta = UNIT_META.filter(function(u){ return u.id === ('u' + m[1]); })[0];
+      return 'Test ' + (meta ? meta.num : m[1]) + ' · Paper ' + m[2];
+    }
+    if((m = unitId.match(/^vocab(\d+)l(\d)$/))){
+      meta = UNIT_META.filter(function(u){ return u.id === ('u' + m[1]); })[0];
+      return 'Vocabulary ' + (meta ? meta.num : m[1]) + ' · Level ' + m[2];
+    }
+    return unitId;
+  }
+  function coinLog(delta, txt){
+    coinState.coins += delta;
+    coinState.log.push({t: Date.now(), delta: delta, coins: coinState.coins, txt: txt});
+    if(coinState.log.length > 4000) coinState.log.splice(0, coinState.log.length - 4000);
+  }
+  function coinJudge(unitId, q, correct){
+    var fullId = unitId + '-' + q.id;
+    if(coinState.judged[fullId]) return;
+    coinState.judged[fullId] = true;
+    var place = coinPlaceLabel(unitId);
+    if(correct){
+      var deep = /(^|\d)d\d+$/.test(String(q.id));
+      coinLog(deep ? COIN_WIN_DEEP : COIN_WIN, (deep ? 'Correct (hard question) · ' : 'Correct · ') + place);
+    } else {
+      coinLog(-COIN_LOSE, 'Wrong · ' + place);
+    }
+  }
+  function coinFmtTime(t){
+    var d = new Date(t);
+    function p2(x){ return (x < 10 ? '0' : '') + x; }
+    return p2(d.getDate()) + '/' + p2(d.getMonth() + 1) + ' ' + p2(d.getHours()) + ':' + p2(d.getMinutes());
+  }
+  function coinParsePlace(txt){
+    var m = String(txt || '').match(/(Practice|Test|Vocabulary)\s+([0-9.]+)/);
+    if(!m) return {unit: 'other', muc: 'Other'};
+    var num = m[2];
+    return {unit: num.split('.')[0], muc: num};
+  }
+  function coinRowHtml(e){
+    var sign = e.delta > 0 ? '+' : '';
+    var cls = e.delta > 0 ? 'is-plus' : 'is-minus';
+    return '<div class="coin-row"><span class="coin-delta ' + cls + '">' + sign + e.delta + '</span><span class="coin-txt">' + escHtml(e.txt) + '</span><span class="coin-when">' + coinFmtTime(e.t) + ' · ' + e.coins + ' coins</span></div>';
+  }
+  function coinHeadHtml(extraCls, label, count, net){
+    var ncls = net >= 0 ? 'is-plus' : 'is-minus';
+    var ntxt = (net > 0 ? '+' : '') + net;
+    return '<button type="button" class="coin-g-head ' + extraCls + '"><span class="coin-chev">\u25B8</span><span class="coin-g-label">' + escHtml(label) + '</span><span class="coin-g-count">' + count + '</span><span class="coin-g-net ' + ncls + '">' + ntxt + '</span></button>';
+  }
+  function renderCoins(){
+    var bal = document.getElementById('coins-balance');
+    var list = document.getElementById('coins-log');
+    if(!bal || !list) return;
+    bal.textContent = coinState.coins;
+    if(!coinState.log.length){
+      list.innerHTML = '<p class="coin-empty">No coin activity yet — submit any exercise to start earning!</p>';
+      return;
+    }
+    var units = {}, unitOrder = [];
+    coinState.log.forEach(function(e){
+      var p = coinParsePlace(e.txt);
+      var u = units[p.unit];
+      if(!u){ u = units[p.unit] = {net: 0, n: 0, mucs: {}, mucOrder: []}; unitOrder.push(p.unit); }
+      u.net += e.delta; u.n++;
+      var mm = u.mucs[p.muc];
+      if(!mm){ mm = u.mucs[p.muc] = {net: 0, n: 0, rows: []}; u.mucOrder.push(p.muc); }
+      mm.net += e.delta; mm.n++; mm.rows.push(e);
+    });
+    function keyNum(x){ var v = parseFloat(x); return isNaN(v) ? 1e9 : v; }
+    unitOrder.sort(function(a, b){ return keyNum(a) - keyNum(b); });
+    var html = '';
+    unitOrder.forEach(function(uk){
+      var u = units[uk];
+      u.mucOrder.sort(function(a, b){ return keyNum(a) - keyNum(b); });
+      var label;
+      if(uk === 'other'){ label = 'Other'; }
+      else {
+        var meta = UNIT_META.filter(function(m){ return String(m.num).split('.')[0] === uk; })[0];
+        label = (meta && meta.group && meta.group.indexOf('\u00B7') >= 0) ? meta.group : ('Unit ' + uk);
+      }
+      var body;
+      if(u.mucOrder.length === 1 && u.mucOrder[0] === uk){
+        body = u.mucs[uk].rows.slice().reverse().map(coinRowHtml).join('');
+      } else {
+        body = u.mucOrder.map(function(mk){
+          var mm = u.mucs[mk];
+          var rows = mm.rows.slice().reverse().map(coinRowHtml).join('');
+          return '<div class="coin-muc">' + coinHeadHtml('coin-muc-head', mk === 'Other' ? 'Other' : ('Lesson ' + mk), mm.n, mm.net) + '<div class="coin-g-body">' + rows + '</div></div>';
+        }).join('');
+      }
+      html += '<div class="coin-unit">' + coinHeadHtml('coin-unit-head', label, u.n, u.net) + '<div class="coin-g-body">' + body + '</div></div>';
+    });
+    list.innerHTML = html;
+  }
+  document.addEventListener('click', function(ev){
+    var head = ev.target && ev.target.closest ? ev.target.closest('.coin-g-head') : null;
+    if(!head) return;
+    if(head.parentElement) head.parentElement.classList.toggle('is-open');
+  });
+  document.querySelectorAll('.saved-subtab').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.saved-subtab').forEach(function(x){ x.classList.toggle('is-active', x === b); });
+      document.querySelectorAll('.saved-sub').forEach(function(p){ p.classList.toggle('is-active', p.dataset.ssub === b.dataset.ssub); });
+      if(b.dataset.ssub === 'coins') renderCoins();
+    });
+  });
+  coinBadge();
+
   function submitUnit(unitId){
     var state = unitStates[unitId];
     if(state.revealed) return;
@@ -5995,6 +6175,7 @@
       if(isCorrect(q, val)){
         correctCount++;
         state.locked[fullId] = true;
+        coinJudge(unitId, q, true);
         qEl.classList.add('is-correct'); qEl.classList.remove('is-incorrect');
         disableQuestionInputs(qEl);
         fb.hidden = false;
@@ -6004,6 +6185,7 @@
         fb.className = 'q-feedback is-correct';
       } else {
         qEl.classList.add('is-incorrect'); qEl.classList.remove('is-correct');
+        coinJudge(unitId, q, false);
         fb.hidden = false;
         fb.dataset.enText = 'Not quite. Hint: ' + q.hint;
         fb.dataset.viText = 'Chưa đúng. Gợi ý: ' + (q.viHint || q.hint);
@@ -6011,6 +6193,9 @@
         fb.className = 'q-feedback is-incorrect';
       }
     });
+    if(state.attempts >= 1){ coinLog(-COIN_FEE, 'Resubmit fee · ' + coinPlaceLabel(unitId)); }
+    coinSave(); coinBadge();
+    if(document.querySelector('.saved-sub[data-ssub="coins"].is-active')) renderCoins();
     state.attempts++;
     saveState(unitId);
     updateStatus(unitId, correctCount, all.length, state);
@@ -6327,6 +6512,7 @@
       eyebrow.textContent = 'My notes';
       titleEl.textContent = 'Notes & Favourites';
       renderSaved();
+      renderCoins();
     } else if(currentTab === 'backup'){
       eyebrow.textContent = 'Save & restore';
       titleEl.textContent = 'Data backup';
