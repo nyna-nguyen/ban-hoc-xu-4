@@ -2,7 +2,7 @@
    HTML documents: NETWORK-FIRST — when online you always get the newest build
    on the very first load; the cached copy is used only when offline.
    Icons/manifest/fonts: cache-first with background refresh. */
-var CACHE = 'ban-hoc-v4';
+var CACHE = 'ban-hoc-v5';
 var FILES = [
   './Ban_hoc.html',
   './Math_Xu_4.html',
@@ -10,6 +10,7 @@ var FILES = [
   './ESL_Xu_4.html',
   './ICT_Xu_4.html',
   './KiemXu.html',
+  './KiemXu_TiengAnh.html',
   './manifest.webmanifest',
   './icon-180.png',
   './icon-192.png',
