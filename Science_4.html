@@ -1105,7 +1105,7 @@
     <div class="toc-top">
       <div class="toc-brand">
         <a class="home-link" href="Ban_hoc.html" title="Về Bàn học · Back to the desk"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg>Bàn học</a><span class="eyebrow">Cambridge Primary Science</span>
-        <h1>Stage 5</h1><div class="build-stamp">Bản dựng · 21/10/2026 15:37 (GMT+7)</div>
+        <h1>Stage 5</h1><div class="build-stamp">Bản dựng · 21/10/2026 22:09 (GMT+7)</div>
       </div>
       <button type="button" class="toc-toggle" id="toc-toggle" aria-expanded="true" aria-label="Collapse unit list">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -23282,6 +23282,8 @@
     if(e.target.closest('#xp-reset')){ XPS[xpUid] = {step:1}; xpSave(); renderExplore(xpUid); return; }
   });
   document.addEventListener('change', function(e){ var s = e.target.closest && e.target.closest('#explore-root [data-xf]'); if(s){ var S = xpSt(xpUid); S.frame = S.frame || []; S.frame[+s.dataset.xf] = s.value; xpSave(); } });
+
+  if(currentTab === 'explore') setTab('explore');
 
 })();
 </script>
