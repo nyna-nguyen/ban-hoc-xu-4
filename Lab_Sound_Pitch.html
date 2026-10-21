@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3E7A54">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Sound Lab · Pitch</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap">
+<style>
+/* Lab page: one lesson told as 5 steps (tabs) — phenomenon → hands-on → model → explain → nature. Same tokens as Science_4. */
+:root{
+  --paper:#F6F7F0; --paper-alt:#EBEEE0; --card:#FDFDF8; --ink:#202B21; --ink-soft:#4B5A4C; --line:#DADFCB;
+  --moss:#3E7A54; --moss-deep:#2C5A3E; --moss-tint:#E4EEE3; --berry:#8E3B55; --berry-tint:#F1D9E1;
+  --gold:#B07F23; --gold-tint:#F3E3C2; --sky:#3A6B8E; --sky-tint:#D9E6F1; --ok:#2F7D4F; --ok-tint:#DFF0E4; --bad:#B23A3A; --bad-tint:#F7E0DE;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#121a13; --paper-alt:#1a231b; --card:#1d271e; --ink:#E8ECE2; --ink-soft:#AEBBAA; --line:#2B362B;
+  --moss:#7FC499; --moss-deep:#A8DAB8; --moss-tint:#1E3324; --berry:#E39FB1; --berry-tint:#3A2530;
+  --gold:#E3B65C; --gold-tint:#3A2F19; --sky:#8FB8D8; --sky-tint:#1E2B36; --ok:#7CCB9A; --ok-tint:#1E3A2A; --bad:#F08A86; --bad-tint:#452224; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --paper:#121a13; --paper-alt:#1a231b; --card:#1d271e; --ink:#E8ECE2; --ink-soft:#AEBBAA; --line:#2B362B;
+  --moss:#7FC499; --moss-deep:#A8DAB8; --moss-tint:#1E3324; --berry:#E39FB1; --berry-tint:#3A2530;
+  --gold:#E3B65C; --gold-tint:#3A2F19; --sky:#8FB8D8; --sky-tint:#1E2B36; --ok:#7CCB9A; --ok-tint:#1E3A2A; --bad:#F08A86; --bad-tint:#452224; color-scheme:dark }
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'Be Vietnam Pro',-apple-system,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Fredoka',ui-rounded,'Segoe UI Rounded',system-ui,sans-serif;font-weight:600;margin:0;text-wrap:balance}
+p{margin:0 0 .7rem;max-width:66ch}p:last-child{margin-bottom:0}
+button{font:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:18px 60px}
+header.top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-bottom:14px}
+.home-link{display:inline-flex;align-items:center;gap:.3rem;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.75rem;color:var(--moss-deep);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:.15rem .65rem;background:var(--card)}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--moss-deep)}
+h1{font-size:clamp(1.5rem,3.6vw,2rem)}
+.sound-note{margin-left:auto;font-size:.78rem;color:var(--ink-soft);background:var(--gold-tint);border-radius:999px;padding:.25rem .7rem}
+nav.steps{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px;-webkit-overflow-scrolling:touch}
+nav.steps button{flex:none;display:flex;align-items:center;gap:.45rem;border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:999px;padding:.45rem .9rem .45rem .45rem;cursor:pointer;font-weight:600;font-size:.9rem;white-space:nowrap}
+nav.steps button .n{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--paper-alt);color:var(--ink-soft);font-family:'Fredoka',sans-serif;font-size:.85rem}
+nav.steps button.on{border-color:var(--moss);color:var(--ink);background:var(--moss-tint)}
+nav.steps button.on .n{background:var(--moss);color:var(--paper)}
+nav.steps button.done .n{background:var(--gold);color:var(--paper)}
+section.step{display:none;flex-direction:column;gap:14px}
+section.step.on{display:flex}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 18px 16px}
+.card.feature{background:var(--paper-alt)}
+.card h2{font-size:1.25rem;padding-right:40px;margin-bottom:.5rem}
+.card h3{font-size:1.05rem;margin-bottom:.4rem}
+.lang-toggle{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);background:var(--paper);color:var(--ink-soft);font-family:'Fredoka',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer}
+.lang-toggle[aria-pressed="true"]{background:var(--berry);border-color:var(--berry);color:var(--paper)}
+.kicker{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--berry);margin-bottom:.2rem}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}
+.btn{display:inline-flex;align-items:center;gap:.45rem;border:0;border-radius:12px;padding:.6rem 1rem;min-height:44px;background:var(--moss);color:var(--paper);font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.btn.play{background:var(--sky)}
+.btn svg{width:18px;height:18px}
+.sndcard{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--paper)}
+.sndcard .ico{width:56px;height:56px;flex:none;border-radius:14px;display:flex;align-items:center;justify-content:center;background:var(--sky-tint);color:var(--sky)}
+.sndcard .ico svg{width:34px;height:34px}
+.sndcard b{display:block;font-family:'Fredoka',sans-serif;font-size:1.05rem;font-weight:600}
+.sndcard small{color:var(--ink-soft)}
+.choices{display:grid;gap:8px}
+.choice{display:flex;gap:10px;align-items:flex-start;text-align:left;border:1.5px solid var(--line);border-radius:12px;padding:.7rem .85rem;background:var(--card);color:var(--ink);cursor:pointer;min-height:48px}
+.choice .L{font-family:'Fredoka',sans-serif;font-weight:700;color:var(--moss-deep);min-width:1.2rem}
+.choice.sel{border-color:var(--moss);background:var(--moss-tint)}
+.choice.right{border-color:var(--ok);background:var(--ok-tint)}
+.choice.wrong{border-color:var(--bad);background:var(--bad-tint)}
+.choice:disabled{cursor:default}
+.note{font-size:.88rem;color:var(--ink-soft)}
+.fb{border-radius:12px;padding:.6rem .85rem;font-weight:600;font-size:.95rem}
+.fb.good{background:var(--ok-tint);color:var(--ok)}.fb.bad{background:var(--bad-tint);color:var(--bad)}.fb.info{background:var(--gold-tint);color:var(--ink)}
+ol.steps-list{margin:0;padding-left:1.3rem;display:grid;gap:.45rem}
+.roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px;margin-top:.6rem}
+.role{border-radius:12px;padding:.6rem .8rem;font-size:.92rem}
+.role.kid{background:var(--moss-tint)}.role.par{background:var(--gold-tint)}
+.role b{font-family:'Fredoka',sans-serif;font-weight:600}
+.obs{width:100%;border-collapse:collapse;font-size:.95rem}
+.obs th,.obs td{border-bottom:1px solid var(--line);padding:.5rem .4rem;text-align:left;vertical-align:middle}
+.obs th{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:var(--card);color:var(--ink-soft);padding:.45rem .7rem;min-height:40px;cursor:pointer;font-weight:600;font-size:.88rem}
+.seg button+button{border-left:1.5px solid var(--line)}
+.seg button.on{background:var(--moss);color:var(--paper)}
+.tblwrap{overflow-x:auto}
+/* simulator */
+.sim{display:grid;gap:12px}
+.sim .seg{justify-self:start}
+.simbox{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px}
+canvas{display:block;width:100%;height:auto;border-radius:10px}
+.dial{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+.dial label{font-weight:700;font-family:'Fredoka',sans-serif;min-width:6.5rem}
+.dial output{font-variant-numeric:tabular-nums;font-weight:700;min-width:5.5rem;text-align:right}
+input[type=range]{width:100%;accent-color:var(--moss);height:32px}
+.readout{display:flex;flex-wrap:wrap;gap:8px}
+.pill{border-radius:999px;padding:.25rem .75rem;font-size:.85rem;font-weight:600;background:var(--paper-alt)}
+.pill.hi{background:var(--berry-tint);color:var(--berry)}.pill.lo{background:var(--sky-tint);color:var(--sky)}
+.words{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:8px}
+.word{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:.55rem .7rem;background:var(--paper)}
+.word b{font-family:'Fredoka',sans-serif;font-size:1.08rem;font-weight:600}
+.word span{display:block;font-size:.82rem;color:var(--ink-soft)}
+.say{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);color:var(--sky);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.say svg{width:18px;height:18px}
+.game{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.game .big{min-width:120px;justify-content:center;font-size:1.05rem}
+.score{font-family:'Fredoka',sans-serif;font-size:1.2rem}
+select.frame{font:inherit;font-weight:700;color:var(--moss-deep);background:var(--moss-tint);border:1.5px solid var(--moss);border-radius:8px;padding:.15rem .3rem;min-height:36px}
+.frame-line{font-size:1.08rem;line-height:2.2}
+.tier{border-top:1px dashed var(--line);margin-top:.7rem;padding-top:.7rem}
+.tier h4{font-size:.95rem;margin-bottom:.4rem;color:var(--ink-soft)}
+.wavepair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:.4rem 0 .6rem}
+.wavepair figure{margin:0;border:1px solid var(--line);border-radius:12px;padding:6px;background:var(--paper);text-align:center;font-weight:700;font-family:'Fredoka',sans-serif}
+.nature{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px}
+.ncard{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--paper);display:flex;flex-direction:column;gap:.5rem}
+.ncard .hd{display:flex;align-items:center;gap:10px}
+.ncard .ico{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--moss-tint);color:var(--moss-deep);flex:none}
+.ncard .ico svg{width:30px;height:30px}
+.ncard h3{margin:0}
+.freq{font-variant-numeric:tabular-nums;font-size:.8rem;font-weight:700;color:var(--berry)}
+.bigidea{background:var(--moss);color:var(--paper);border:0}
+.bigidea h2,.bigidea .kicker{color:var(--paper)}
+.bigidea .lang-toggle{background:transparent;color:var(--paper);border-color:var(--paper)}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:'Fredoka',sans-serif;font-size:1.05rem;margin:.4rem 0}
+.chain span{background:rgba(255,255,255,.16);border-radius:999px;padding:.2rem .7rem}
+.qa{display:grid;gap:10px}
+.qa .q{border-left:4px solid var(--gold);background:var(--paper);border-radius:0 12px 12px 0;padding:.6rem .85rem}
+.qa .q b{font-family:'Fredoka',sans-serif;font-weight:600}
+.next{align-self:flex-end}
+@media (max-width:600px){.dial{grid-template-columns:1fr auto}.dial label{grid-column:1/-1}.wavepair{grid-template-columns:1fr}.sound-note{margin-left:0}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+<header class="top">
+  <a class="home-link" href="Science_4.html">‹ Science</a>
+  <div><div class="eyebrow">Sound · Lesson 2.3 · Lab</div><h1>Why are some sounds high and some low?</h1></div>
+  <span class="sound-note">🔊 Bật tiếng iPad (gạt nút im lặng)</span>
+</header>
+
+<nav class="steps" id="stepnav" aria-label="Các bước">
+  <button type="button" data-s="1" class="on"><span class="n">1</span>Mystery</button>
+  <button type="button" data-s="2"><span class="n">2</span>Kitchen lab</button>
+  <button type="button" data-s="3"><span class="n">3</span>Sound machine</button>
+  <button type="button" data-s="4"><span class="n">4</span>Explain it</button>
+  <button type="button" data-s="5"><span class="n">5</span>In nature</button>
+  <button type="button" data-s="6"><span class="n">★</span>Bố mẹ</button>
+</nav>
+
+<!-- STEP 1 -->
+<section class="step on" data-step="1">
+  <div class="card feature i18n">
+    <button type="button" class="lang-toggle" aria-pressed="false" aria-label="Xem tiếng Việt">V</button>
+    <div class="kicker t" data-vi="Câu hỏi bí ẩn">The mystery</div>
+    <h2 class="t" data-vi="Muỗi bé tí mà kêu «vo ve» rất cao. Con bò to lớn lại «ụm bò» rất trầm. Vì sao?">A tiny mosquito whines really HIGH. A big cow moos really LOW. Why?</h2>
+    <p class="t" data-vi="Bấm nghe hai âm thanh. Đừng vội đọc giải thích — trước hết hãy <b>đoán</b>.">Tap to listen to both sounds. Don't look for the answer yet — first, make a <b>guess</b>.</p>
+    <div class="grid2">
+      <div class="sndcard"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="13" rx="2" ry="4"/><path d="M12 9c-3-4-7-4-8-2 2 2 5 3 8 2zM12 9c3-4 7-4 8-2-2 2-5 3-8 2z"/><path d="M12 17v4M10 17l-3 3M14 17l3 3M12 9V6"/></svg></span><div style="flex:1"><b class="t" data-vi="Con muỗi">Mosquito</b><small class="t" data-vi="Nhỏ, nhẹ">Small, light</small></div><button type="button" class="btn play" data-play="mosquito"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="t" data-vi="Nghe">Listen</span></button></div>
+      <div class="sndcard"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8c0-2 1-3 2-3M19 8c0-2-1-3-2-3"/><rect x="6" y="7" width="12" height="10" rx="5"/><ellipse cx="12" cy="15" rx="3.5" ry="2.5"/><circle cx="10.5" cy="15" r=".5" fill="currentColor"/><circle cx="13.5" cy="15" r=".5" fill="currentColor"/><circle cx="9" cy="10.5" r=".7" fill="currentColor"/><circle cx="15" cy="10.5" r=".7" fill="currentColor"/></svg></span><div style="flex:1"><b class="t" data-vi="Con bò">Cow</b><small class="t" data-vi="To, nặng">Big, heavy</small></div><button type="button" class="btn play" data-play="cow"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="t" data-vi="Nghe">Listen</span></button></div>
+    </div>
+  </div>
+  <div class="card i18n">
+    <button type="button" class="lang-toggle" aria-pressed="false" aria-label="Xem tiếng Việt">V</button>
+    <h3 class="t" data-vi="Con đoán thế nào?">What is your guess?</h3>
+    <div class="choices" id="predict">
+      <button type="button" class="choice" data-v="A"><span class="L">A</span><span class="t" data-vi="Con vật to kêu to hơn, nên nghe trầm hơn.">Big animals are louder, so they sound lower.</span></button>
+      <button type="button" class="choice" data-v="B"><span class="L">B</span><span class="t" data-vi="Cánh muỗi rung NHANH hơn rất nhiều so với dây thanh của con bò.">The mosquito's wings shake much FASTER than the cow's voice box.</span></button>
+      <button type="button" class="choice" data-v="C"><span class="L">C</span><span class="t" data-vi="Con muỗi bay sát tai mình hơn.">The mosquito is closer to your ear.</span></button>
+      <button type="button" class="choice" data-v="D"><span class="L">D</span><span class="t" data-vi="Con vật nhỏ thì cố hét cho người khác nghe thấy.">Small animals try to scream so others hear them.</span></button>
+    </div>
+    <p class="note t" id="predictNote" data-vi="Chưa có đúng hay sai ở bước này. Con sẽ tự kiểm tra ở bước 4.">No right or wrong yet. You will check your guess yourself in step 4.</p>
+  </div>
+  <button type="button" class="btn next" data-go="2"><span class="t0">Next: Kitchen lab ›</span></button>
+</section>
+
+<!-- STEP 2 -->
+<section class="step" data-step="2">
+  <div class="card feature i18n">
+    <button type="button" class="lang-toggle" aria-pressed="false" aria-label="Xem tiếng Việt">V</button>
+    <div class="kicker t" data-vi="Thí nghiệm 10 phút trong bếp">10-minute kitchen lab</div>
+    <h2 class="t" data-vi="Thước kẻ biết hát">The singing ruler</h2>
+    <p class="t" data-vi="<b>Cần:</b> một thước kẻ dài 30 cm (thước nhựa hoặc thép), một cái bàn.">You need: a 30 cm ruler (plastic or metal) and a table.</p>
+    <ol class="steps-list">
+      <li class="t" data-vi="Đặt thước lên mép bàn, để <b>thò ra ngoài dài</b> (khoảng 20 cm). Lấy tay đè chặt phần trên bàn.">Lay the ruler on the edge of the table with a <b>long part sticking out</b> (about 20 cm). Press the part on the table down hard.</li>
+      <li class="t" data-vi="Bật đầu thước ra. <b>Nhìn</b> nó rung và <b>nghe</b> tiếng.">Flick the free end. <b>Watch</b> it shake and <b>listen</b>.</li>
+      <li class="t" data-vi="Kéo thước vào cho phần thò ra <b>vừa</b> (12 cm), rồi <b>ngắn</b> (6 cm). Bật lại mỗi lần.">Slide it in so the part sticking out is <b>medium</b> (12 cm), then <b>short</b> (6 cm). Flick it each time.</li>
+    </ol>
+    <div class="roles">
+      <div class="role par t" data-vi="<b>Bố mẹ:</b> đè chặt thước để con chỉ việc bật và quan sát. Đừng nói trước kết quả.">Parent: hold the ruler down tight so your child only flicks and watches. Don't tell the result first.</div>
+      <div class="role kid t" data-vi="<b>Con:</b> bật thước, nhìn thật kỹ phần đầu thước, rồi điền bảng bên dưới.">You: flick, watch the end of the ruler closely, then fill in the table below.</div>
+    </div>
+  </div>
+  <div class="card i18n">
+    <button type="button" class="lang-toggle" aria-pressed="false" aria-label="Xem tiếng Việt">V</button>
+    <h3 class="t" data-vi="Bảng quan sát của con">My observations</h3>
+    <div class="tblwrap"><table class="obs" id="obs">
+      <thead><tr><th class="t" data-vi="Phần thò ra">Part sticking out</th><th class="t" data-vi="Thước rung…">The ruler shakes…</th><th class="t" data-vi="Âm thanh…">The sound is…</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <div id="obsFb" style="margin-top:.7rem"></div>
+  </div>
+  <button type="button" class="btn next" data-go="3"><span class="t0">Next: Sound machine ›</span></button>
+</section>
+
+<!-- STEP 3 -->
+<section class="step" data-step="3">
+  <div class="card feature i18n">
+    <button type="button" class="lang-toggle" aria-pressed="false" aria-label="Xem tiếng Việt">V</button>
+    <div class="kicker t" data-vi="Máy âm thanh">Sound machine</div>
+    <h2 class="t" data-vi="Tự tay điều khiển một âm thanh">Control a sound yourself</h2>
+    <p class="t" data-vi="Kéo thanh <b>Speed</b> (tốc độ rung) rồi bấm <b>Play</b>. Xem sóng thay đổi và nghe cao độ đổi theo. Sau đó thử thanh <b>Size</b> (độ lớn rung) — nó đổi gì?">Move the <b>Speed</b> dial and press <b>Play</b>. Watch the wave and listen to the pitch change. Then try the <b>Size</b> dial — what does it change?</p>
+    <div class="sim">
+      <div class="seg" id="simMode" role="group" aria-label="Mode"><button type="button" data-m="dial" class="on">Speed dial</button><button type="button" data-m="ruler">Ruler</button></div>
+      <div class="simbox"><canvas id="cv" width="900" height="300" aria-label="Sound wave picture"></canvas></div>
+      <div id="dialCtl">
+        <div class="dial"><label for="spd">Speed</label><input type="range" id="spd" min="0" max="100" value="35"><output id="spdOut">200 Hz</output></div>
+        <div class="dial"><label for="amp">Size</label><input type="range" id="amp" min="10" max="100" value="60"><output id="ampOut">medium</output></div>
+      </div>
+      <div id="rulerCtl" hidden>
+        <div class="dial"><label for="len">Ruler out</label><input type="range" id="len" min="6" max="24" value="20" step="1"><output id="lenOut">20 cm</output></div>
+      </div>
+      <div class="row"><button type="button" class="btn play" id="playBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span>Play</span></button><div class="readout" id="readout"></div></div>
+    </div>
+  </div>
+  <div class="card i18n">
+    <button type="button" class="lang-toggle" aria-pressed="false" aria-label="Xem tiếng Việt">V</button>
+    <h3 class="t" data-vi="Điều con vừa thấy">What you just saw</h3>
+    <p class="t" data-vi="Mọi âm thanh đều do một vật <b>rung</b> (vibrate) tạo ra. <b>Rung càng nhanh → âm càng cao.</b> Rung càng chậm → âm càng trầm. Độ cao thấp của âm gọi là <b>pitch</b> (cao độ). Số lần rung mỗi giây gọi là <b>frequency</b> (tần số), đo bằng <b>hertz (Hz)</b>: 200 Hz nghĩa là rung 200 lần mỗi giây!">Every sound is made by something that <b>vibrates</b>. <b>Faster vibration → higher sound.</b> Slower vibration → lower sound. How high or low a sound is, is called its <b>pitch</b>. The number of vibrations each second is the <b>frequency</b>, measured in <b>hertz (Hz)</b>: 200 Hz means 200 shakes every second!</p>
+    <p class="t" data-vi="Thanh <b>Size</b> làm sóng cao hay thấp — đó là <b>âm lượng</b> (to/nhỏ), KHÔNG phải cao độ. Hai núm vặn khác nhau!">The <b>Size</b> dial makes the wave taller or shorter — that is <b>volume</b> (loud/quiet), NOT pitch. Two different dials!</p>
+  </div>
+  <div class="card i18n">
+    <button type="button" class="lang-toggle" aria-pressed="false" aria-label="Xem tiếng Việt">V</button>
+    <h3 class="t" data-vi="5 từ cần nhớ (bấm loa để nghe)">5 words to know (tap to hear)</h3>
+    <div class="words">
+      <div class="word"><button type="button" class="say" data-say="vibrate" aria-label="Say vibrate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button><div><b>vibrate</b><span>rung</span></div></div>
+      <div class="word"><button type="button" class="say" data-say="pitch" aria-label="Say pitch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button><div><b>pitch</b><span>cao độ (âm cao hay trầm)</span></div></div>
+      <div class="word"><button type="button" class="say" data-say="frequency" aria-label="Say frequency"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button><div><b>frequency</b><span>tần số (số lần rung mỗi giây)</span></div></div>
+      <div class="word"><button type="button" class="say" data-say="hertz" aria-label="Say hertz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button><div><b>hertz (Hz)</b><span>đơn vị đo tần số</span></div></div>
+      <div class="word"><button type="button" class="say" data-say="volume" aria-label="Say volume"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button><div><b>volume</b><span>âm lượng (to hay nhỏ)</span></div></div>
+    </div>
+  </div>
+  <div class="card i18n">
+    <button type="button" class="lang-toggle" aria-pressed="false" aria-label="Xem tiếng Việt">V</button>
+    <h3 class="t" data-vi="Trò chơi đôi tai: âm nào CAO hơn?">Ear game: which sound is HIGHER?</h3>
+    <p class="t" data-vi="Bấm «Chơi» để nghe hai âm. Chọn âm cao hơn. Càng về sau hai âm càng gần nhau!">Press Start to hear two sounds. Pick the higher one. They get closer together as you go!</p>
+    <div class="game"><button type="button" class="btn" id="gStart">▶ Start</button><button type="button" class="btn ghost big" id="g1" disabled>Sound 1</button><button type="button" class="btn ghost big" id="g2" disabled>Sound 2</button><span class="score" id="gScore"></span></div>
+    <div id="gFb" style="margin-top:.6rem"></div>
+  </div>
+  <button type="button" class="btn next" data-go="4"><span class="t0">Next: Explain it ›</span></button>
+</section>
+
+<!-- STEP 4 -->
+<section class="step" data-step="4">
+  <div class="card feature i18n">
+    <button type="button" class="lang-toggle" aria-pressed="false" aria-label="Xem tiếng Việt">V</button>
+    <div class="kicker t" data-vi="Quay lại câu hỏi bí ẩn">Back to the mystery</div>
+    <h2 class="t" data-vi="Lúc đầu con đoán gì?">What did you guess at the start?</h2>
+    <div id="guessBack"></div>
+    <p class="frame-line" style="margin-top:.8rem">The mosquito's wings vibrate
+      <select class="frame" id="f1" aria-label="blank 1"><option value="">…</option><option>fast</option><option>slowly</option></select>, so its sound has a
+      <select class="frame" id="f2" aria-label="blank 2"><option value="">…</option><option>high</option><option>low</option></select> pitch. The cow's voice box vibrates
+      <select class="frame" id="f3" aria-label="blank 3"><option value="">…</option><option>fast</option><option>slowly</option></select>, so its sound has a
+      <select class="frame" id="f4" aria-label="blank 4"><option value="">…</option><option>high</option><option>low</option></select> pitch.</p>
+    <div class="row"><button type="button" class="btn" id="fCheck">Check</button></div>
+    <div id="fFb" style="margin-top:.6rem"></div>
+  </div>
+  <div id="tq"></div>
+</section>
+
+<!-- STEP 5 -->
+<section class="step" data-step="5">
+  <div class="card feature i18n">
+    <button type="button" class="lang-toggle" aria-pressed="false" aria-label="Xem tiếng Việt">V</button>
+    <div class="kicker t" data-vi="Cao độ trong tự nhiên">Pitch in nature</div>
+    <h2 class="t" data-vi="Thiên nhiên dùng cao độ để làm gì?">How does nature use pitch?</h2>
+    <p class="t" data-vi="Cùng một quy luật — <b>nhỏ, ngắn, nhanh = cao</b> — nằm ở khắp nơi quanh con. Bấm nghe (âm thanh mô phỏng, không phải tiếng thật).">The same rule — <b>small, short, fast = high</b> — is all around you. Tap to listen (made-up sounds, not real recordings).</p>
+    <div class="nature" id="nature"></div>
+  </div>
+  <div class="card bigidea i18n">
+    <button type="button" class="lang-toggle" aria-pressed="false" aria-label="Xem tiếng Việt">V</button>
+    <div class="kicker t" data-vi="Ý tưởng lớn">Big idea</div>
+    <h2 class="t" data-vi="Kích thước → tốc độ rung → cao độ">Size → speed of vibration → pitch</h2>
+    <div class="chain"><span class="t" data-vi="nhỏ / ngắn / căng / mỏng">small / short / tight / thin</span>→<span class="t" data-vi="rung nhanh">fast vibration</span>→<span class="t" data-vi="âm cao">high pitch</span></div>
+    <p class="t" data-vi="Con sẽ gặp lại quy luật này ở bài 2.5 (nhạc cụ: dây đàn, sáo, chai nước) và ở chương 6 (động vật thích nghi: vì sao mỗi loài có giọng riêng). Nhìn kích thước một vật, con có thể <b>đoán trước</b> nó kêu cao hay trầm!">You will meet this rule again in lesson 2.5 (instruments: strings, flutes, water bottles) and in unit 6 (how animals are adapted). Look at the size of something, and you can <b>predict</b> its pitch before you hear it!</p>
+  </div>
+</section>
+
+<!-- PARENT -->
+<section class="step" data-step="6">
+  <div class="card feature">
+    <div class="kicker">Góc bố mẹ</div>
+    <h2>Hỏi con trong bữa tối (5 phút, bằng tiếng Việt)</h2>
+    <div class="qa">
+      <div class="q"><b>1. «Vì sao tiếng muỗi cao mà tiếng bò trầm?»</b><br>Con hiểu khi nói được ý: cánh muỗi rung rất nhanh, dây thanh con bò rung chậm. Nếu con chỉ nói «vì muỗi nhỏ» thì hỏi tiếp: «Nhỏ thì sao? Nhỏ thì rung thế nào?»</div>
+      <div class="q"><b>2. «Bố hét thật to bằng giọng trầm — giọng bố cao hơn hay to hơn?»</b><br>Câu này bắt lỗi nhầm phổ biến nhất: nhầm <i>to</i> (volume) với <i>cao</i> (pitch). Con cần tách được hai thứ.</div>
+      <div class="q"><b>3. «Con đoán con mèo con hay con mèo lớn kêu cao hơn? Vì sao?»</b><br>Câu vận dụng: con dùng quy luật «nhỏ → rung nhanh → cao» để đoán điều chưa học.</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Dấu hiệu con đã hiểu thật</h3>
+    <ol class="steps-list">
+      <li>Giải thích được bằng tiếng Việt, không cần nhìn bài.</li>
+      <li>Dùng đúng cặp từ <b>fast → high</b>, <b>slow → low</b> khi nói tiếng Anh.</li>
+      <li>Không nhầm «to» với «cao».</li>
+      <li>Tự nghĩ ra một ví dụ mới (cái còi, tiếng chim, dây chun…).</li>
+    </ol>
+    <p class="note" style="margin-top:.6rem">Kết quả của con ở bước 2 và bước 4 được lưu ngay trên iPad. Mở lại trang là thấy.</p>
+  </div>
+  <div class="card" id="parentLog"></div>
+</section>
+</div>
+
+<script>
+(function(){
+"use strict";
+var KEY='xuxu-science-lab-pitch-v1';
+var S={};try{S=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){S={};}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+var $=function(s,r){return (r||document).querySelector(s);}, $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+
+/* ---------- language toggle (per card, EN default) ---------- */
+$$('.t').forEach(function(el){el.setAttribute('data-en',el.innerHTML);});
+document.addEventListener('click',function(e){var b=e.target.closest('.lang-toggle');if(!b)return;var card=b.closest('.i18n');var vi=b.getAttribute('aria-pressed')!=='true';
+  b.setAttribute('aria-pressed',vi?'true':'false');b.textContent=vi?'E':'V';
+  $$('.t',card).forEach(function(el){if(el.closest('.i18n')!==card)return;var v=el.getAttribute(vi?'data-vi':'data-en');if(v!=null)el.innerHTML=v;});});
+
+/* ---------- steps ---------- */
+function go(n){$$('nav.steps button').forEach(function(b){b.classList.toggle('on',b.dataset.s===String(n));});$$('section.step').forEach(function(s){s.classList.toggle('on',s.dataset.step===String(n));});
+  S.step=n;save();window.scrollTo(0,0);if(n===4)renderGuess();if(n===6)renderParent();stopTone();}
+$$('nav.steps button').forEach(function(b){b.onclick=function(){go(+b.dataset.s);};});
+$$('[data-go]').forEach(function(b){b.onclick=function(){go(+b.dataset.go);};});
+function markDone(n){var b=$('nav.steps button[data-s="'+n+'"]');if(b)b.classList.add('done');}
+
+/* ---------- audio ---------- */
+var AC=null,cur=null;
+function ac(){if(!AC){var C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C();}if(AC.state==='suspended')AC.resume();return AC;}
+function stopTone(){if(cur){try{cur.g.gain.cancelScheduledValues(0);cur.g.gain.setTargetAtTime(0,AC.currentTime,0.02);var o=cur.o;setTimeout(function(){try{o.stop();}catch(e){}},120);}catch(e){}cur=null;}}
+function tone(f,dur,vol,type,mod){var a=ac();if(!a)return;stopTone();var o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.value=f;
+  var t=a.currentTime;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol==null?0.25:vol,t+0.03);
+  if(mod){var lfo=a.createOscillator(),lg=a.createGain();lfo.frequency.value=mod.rate;lg.gain.value=mod.depth;lfo.connect(lg);lg.connect(mod.target==='gain'?g.gain:o.frequency);lfo.start(t);lfo.stop(t+dur+0.1);}
+  g.gain.setValueAtTime(vol==null?0.25:vol,t+Math.max(0.05,dur-0.08));g.gain.linearRampToValueAtTime(0,t+dur);
+  o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+dur+0.05);cur={o:o,g:g};o.onended=function(){if(cur&&cur.o===o)cur=null;};}
+var SOUNDS={
+  mosquito:function(){tone(620,2.2,0.12,'sawtooth',{rate:7,depth:25});},
+  cow:function(){tone(110,1.8,0.35,'sawtooth',{rate:3,depth:8});},
+  cicada:function(){tone(4200,2.2,0.08,'square',{rate:60,depth:0.08,target:'gain'});},
+  treefrog:function(){var a=ac();if(!a)return;[0,0.35,0.7].forEach(function(d){setTimeout(function(){tone(2600,0.18,0.12,'triangle');},d*1000);});},
+  bullfrog:function(){tone(180,1.4,0.35,'sawtooth',{rate:12,depth:0.15,target:'gain'});},
+  elephant:null, bat:null
+};
+document.addEventListener('click',function(e){var b=e.target.closest('[data-play]');if(!b)return;var k=b.dataset.play;var f=SOUNDS[k];if(f){f();return;}
+  /* sounds outside human hearing: play nothing on purpose */
+  var card=b.closest('.ncard');var m=card&&card.querySelector('.silent');if(!m&&card){m=document.createElement('div');m.className='fb info silent';card.appendChild(m);}
+  if(m)m.innerHTML=k==='elephant'?'🤫 Con không nghe thấy gì, đúng không? Âm này dưới 20 Hz — quá trầm cho tai người. <span class="note">Too low for human ears.</span>':'🤫 Im lặng hoàn toàn! Âm này trên 20.000 Hz — quá cao cho tai người. <span class="note">Too high for human ears.</span>';});
+
+/* speech */
+document.addEventListener('click',function(e){var b=e.target.closest('[data-say]');if(!b||!window.speechSynthesis)return;var u=new SpeechSynthesisUtterance(b.dataset.say);u.lang='en-GB';u.rate=0.85;
+  var v=speechSynthesis.getVoices().filter(function(x){return /^en-GB/i.test(x.lang);})[0];if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u);});
+
+/* ---------- step 1: prediction ---------- */
+var PRED={A:['Big animals are louder, so they sound lower.','Con vật to kêu to hơn, nên nghe trầm hơn.'],B:["The mosquito's wings shake much FASTER than the cow's voice box.",'Cánh muỗi rung NHANH hơn rất nhiều so với dây thanh của con bò.'],C:['The mosquito is closer to your ear.','Con muỗi bay sát tai mình hơn.'],D:['Small animals try to scream so others hear them.','Con vật nhỏ cố hét cho người khác nghe thấy.']};
+function paintPred(){$$('#predict .choice').forEach(function(c){c.classList.toggle('sel',c.dataset.v===S.pred);});}
+$$('#predict .choice').forEach(function(c){c.onclick=function(){S.pred=c.dataset.v;save();paintPred();markDone(1);};});
+paintPred();if(S.pred)markDone(1);
+
+/* ---------- step 2: observation table ---------- */
+var ROWS=[['long','dài (20 cm)','Long (20 cm)'],['mid','vừa (12 cm)','Medium (12 cm)'],['short','ngắn (6 cm)','Short (6 cm)']];
+S.obs=S.obs||{};
+function segHtml(row,key,opts){return '<div class="seg" data-row="'+row+'" data-key="'+key+'">'+opts.map(function(o){var on=(S.obs[row]||{})[key]===o[0];return '<button type="button" data-v="'+o[0]+'" class="'+(on?'on':'')+'">'+o[1]+'</button>';}).join('')+'</div>';}
+function renderObs(){$('#obs tbody').innerHTML=ROWS.map(function(r){return '<tr><td><b>'+r[2]+'</b><br><span class="note">'+r[1]+'</span></td><td>'+segHtml(r[0],'shake',[['slow','slowly'],['fast','fast']])+'</td><td>'+segHtml(r[0],'sound',[['low','low'],['high','high']])+'</td></tr>';}).join('');checkObs();}
+function checkObs(){var o=S.obs,full=ROWS.every(function(r){return o[r[0]]&&o[r[0]].shake&&o[r[0]].sound;});var fb=$('#obsFb');
+  if(!full){fb.innerHTML='<div class="fb info">Điền đủ 6 ô để xem nhận xét. <span class="note">(Fill all 6 boxes.)</span></div>';return;}
+  var good=o.long.shake==='slow'&&o.long.sound==='low'&&o.short.shake==='fast'&&o.short.sound==='high';
+  fb.innerHTML=good?'<div class="fb good">Excellent scientist! Shorter ruler → faster shaking → higher sound. Con vừa tự tìm ra quy luật của bài!</div>'
+    :'<div class="fb bad">Hmm, try once more: flick the SHORT ruler and look very closely at how fast the tip moves. Thử lại phần thước ngắn và nhìn thật kỹ đầu thước nhé.</div>';
+  if(good)markDone(2);}
+document.addEventListener('click',function(e){var b=e.target.closest('#obs .seg button');if(!b)return;var sg=b.parentNode;var row=sg.dataset.row,key=sg.dataset.key;S.obs[row]=S.obs[row]||{};S.obs[row][key]=b.dataset.v;save();renderObs();});
+renderObs();
+
+/* ---------- step 3: simulator ---------- */
+var cv=$('#cv'),cx=cv.getContext('2d');var mode='dial',playing=false,phase=0,last=0;
+function fFromSpd(v){return Math.round(80*Math.pow(1000/80,v/100));}
+function fFromLen(L){return Math.round(120*Math.pow(20/L,2));}
+function curF(){return mode==='dial'?fFromSpd(+$('#spd').value):fFromLen(+$('#len').value);}
+function curA(){return mode==='dial'?(+$('#amp').value)/100:0.7;}
+function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#3E7A54';}
+function label(f){return f>=500?['high','hi']:f<=180?['low','lo']:['medium',''];}
+function readout(){var f=curF(),l=label(f);$('#spdOut').textContent=fFromSpd(+$('#spd').value)+' Hz';var a=+$('#amp').value;$('#ampOut').textContent=a<40?'small':a<75?'medium':'big';$('#lenOut').textContent=$('#len').value+' cm';
+  $('#readout').innerHTML='<span class="pill">'+f+' vibrations / second</span><span class="pill '+l[1]+'">pitch: '+l[0]+'</span>'+(mode==='dial'?'<span class="pill">volume: '+$('#ampOut').textContent+'</span>':'');
+  if(cur&&cur.live){try{cur.o.frequency.setTargetAtTime(f,AC.currentTime,0.03);cur.g.gain.setTargetAtTime(0.06+0.3*curA(),AC.currentTime,0.03);}catch(e){}}}
+function fit(){var w=cv.clientWidth;if(!w)return;var W=w<560?600:900;if(cv.width!==W){cv.width=W;cv.height=w<560?340:300;}}window.addEventListener('resize',fit);fit();
+function draw(t){fit();var W=cv.width,H=cv.height;var fs=W<700?30:22,fs2=W<700?24:18,L0=W<700?200:260;var dt=(t-last)/1000;last=t;if(!(dt>0&&dt<0.2))dt=0;var f=curF(),A=curA();
+  cx.clearRect(0,0,W,H);var ink=css('--ink-soft'),line=css('--line'),moss=css('--moss'),berry=css('--berry'),sky=css('--sky');
+  if(mode==='dial'){
+    /* left: vibrating string, right: wave */
+    var sx=150;cx.strokeStyle=line;cx.lineWidth=2;cx.beginPath();cx.moveTo(20,H/2);cx.lineTo(W-20,H/2);cx.stroke();
+    phase+=dt*(f/40)*Math.PI*2*(playing?1:0.35);
+    cx.fillStyle=ink;cx.font='600 '+fs+'px Be Vietnam Pro, sans-serif';cx.fillText('string',30,40);cx.fillText('sound wave',L0,40);
+    var off=Math.sin(phase)*A*90;cx.strokeStyle=moss;cx.lineWidth=5;cx.beginPath();cx.moveTo(40,70);cx.quadraticCurveTo(40+off*2,H/2,40,H-50);cx.stroke();
+    cx.fillStyle=moss;[70,H-50].forEach(function(y){cx.beginPath();cx.arc(40,y,7,0,7);cx.fill();});
+    var cycles=f/40;cx.strokeStyle=f>=500?berry:f<=180?sky:moss;cx.lineWidth=4;cx.beginPath();
+    for(var x=0;x<=W-L0-20;x+=2){var y=H/2+Math.sin((x/(W-L0-20))*cycles*Math.PI*2-phase)*A*105;if(x===0)cx.moveTo(L0+x,y);else cx.lineTo(L0+x,y);}cx.stroke();
+    cx.fillStyle=ink;cx.font='500 '+fs2+'px Be Vietnam Pro, sans-serif';cx.fillText('↔ closer waves = higher pitch',L0,H-14);if(W>=700)cx.fillText('↕ taller waves = louder',W-250,H-14);else cx.fillText('↕ taller waves = louder',L0,30+fs+8);
+  }else{
+    var L=+$('#len').value;var edge=W<700?150:260;var px=L*((W-edge-30)/24);
+    cx.fillStyle=css('--paper-alt');cx.fillRect(20,H/2+12,edge-20,H/2-30);cx.strokeStyle=line;cx.strokeRect(20,H/2+12,edge-20,H/2-30);
+    cx.fillStyle=ink;cx.font='600 '+fs+'px Be Vietnam Pro, sans-serif';cx.fillText('table',40,H/2+56);
+    cx.fillStyle=css('--gold');cx.fillRect(60,H/2-2,edge-60,14);
+    phase+=dt*(f/60)*Math.PI*2*(playing?1:0.35);var tip=Math.sin(phase)*60*(L/24);
+    cx.strokeStyle=css('--gold');cx.lineWidth=14;cx.lineCap='butt';cx.beginPath();cx.moveTo(edge,H/2+5);cx.quadraticCurveTo(edge+px*0.6,H/2+5,edge+px,H/2+5+tip);cx.stroke();
+    cx.strokeStyle=line;cx.setLineDash([6,6]);cx.lineWidth=2;cx.beginPath();cx.moveTo(edge+px,H/2-70);cx.lineTo(edge+px,H/2+80);cx.stroke();cx.setLineDash([]);
+    cx.fillStyle=ink;cx.fillText(L+' cm out',edge+px/2-50,H/2-60);cx.font='500 '+fs2+'px Be Vietnam Pro, sans-serif';cx.fillText('shorter → faster → higher',30,36);
+  }
+  requestAnimationFrame(draw);}
+requestAnimationFrame(function(t){last=t;draw(t);});
+function startLive(){var a=ac();if(!a)return;stopTone();var o=a.createOscillator(),g=a.createGain();o.type='triangle';o.frequency.value=curF();g.gain.value=0;o.connect(g);g.connect(a.destination);o.start();g.gain.setTargetAtTime(0.06+0.3*curA(),a.currentTime,0.03);cur={o:o,g:g,live:true};}
+$('#playBtn').onclick=function(){if(playing){playing=false;stopTone();}else{playing=true;startLive();markDone(3);}$('#playBtn span').textContent=playing?'Stop':'Play';};
+['#spd','#amp','#len'].forEach(function(s){$(s).addEventListener('input',readout);});
+$$('#simMode button').forEach(function(b){b.onclick=function(){mode=b.dataset.m;$$('#simMode button').forEach(function(x){x.classList.toggle('on',x===b);});$('#dialCtl').hidden=mode!=='dial';$('#rulerCtl').hidden=mode!=='ruler';readout();};});
+readout();
+var _go=go;go=function(n){if(n!==3&&playing){playing=false;$('#playBtn span').textContent='Play';}_go(n);};
+$$('nav.steps button').forEach(function(b){b.onclick=function(){go(+b.dataset.s);};});$$('[data-go]').forEach(function(b){b.onclick=function(){go(+b.dataset.go);};});
+
+/* ear game */
+var G={round:0,ok:0,pair:null};
+var GAPS=[2.0,1.6,1.35,1.2,1.12];
+function gRound(){if(G.round>=5){$('#gFb').innerHTML='<div class="fb '+(G.ok>=4?'good':'info')+'">'+G.ok+' / 5 correct. '+(G.ok>=4?'Great ears! Tai con rất tinh!':'Play again to train your ears. Chơi lại để luyện tai nhé.')+'</div>';S.ear=Math.max(S.ear||0,G.ok);save();$('#g1').disabled=$('#g2').disabled=true;$('#gStart').textContent='▶ Play again';return;}
+  var base=200+Math.random()*300,hi=base*GAPS[G.round];var first=Math.random()<0.5;G.pair=first?[hi,base]:[base,hi];G.ans=first?1:2;
+  $('#gScore').textContent='Round '+(G.round+1)+'/5';$('#g1').disabled=$('#g2').disabled=false;tone(G.pair[0],0.6,0.22,'triangle');setTimeout(function(){tone(G.pair[1],0.6,0.22,'triangle');},800);}
+$('#gStart').onclick=function(){G={round:0,ok:0};$('#gFb').innerHTML='';gRound();};
+[1,2].forEach(function(k){$('#g'+k).onclick=function(){if(!G.pair)return;var ok=k===G.ans;if(ok)G.ok++;$('#gFb').innerHTML='<div class="fb '+(ok?'good':'bad')+'">'+(ok?'Yes!':'Not this time — sound '+G.ans+' was higher.')+'</div>';G.round++;G.pair=null;$('#g1').disabled=$('#g2').disabled=true;setTimeout(gRound,900);};});
+
+/* ---------- step 4 ---------- */
+function renderGuess(){var p=S.pred;var el=$('#guessBack');if(!p){el.innerHTML='<div class="fb info">Con chưa đoán ở bước 1. <span class="note">Go back to step 1 and make a guess first.</span></div>';return;}
+  var ok=p==='B';el.innerHTML='<div class="choice '+(ok?'right':'wrong')+'" style="cursor:default"><span class="L">'+p+'</span><span>'+PRED[p][0]+'<br><span class="note">'+PRED[p][1]+'</span></span></div>'+
+   '<div class="fb '+(ok?'good':'info')+'" style="margin-top:.5rem">'+(ok?'Your guess was right! The ruler and the sound machine showed you why.':'Good try! Scientists often guess wrong first. The ruler and the sound machine showed the real reason: <b>B</b> — faster vibration means higher pitch.')+'</div>';}
+$('#fCheck').onclick=function(){var v=['#f1','#f2','#f3','#f4'].map(function(s){return $(s).value;});var want=['fast','high','slowly','low'];var ok=v.every(function(x,i){return x===want[i];});
+  $('#fFb').innerHTML=v.some(function(x){return !x;})?'<div class="fb info">Chọn đủ 4 chỗ trống nhé.</div>':ok?'<div class="fb good">Perfect sentence! Đây chính là lời giải thích của nhà khoa học.</div>':'<div class="fb bad">Not quite. Remember: fast → high, slow → low. Nhớ: nhanh → cao, chậm → trầm.</div>';
+  S.frame=v;save();if(ok)markDone(4);};
+if(S.frame)['#f1','#f2','#f3','#f4'].forEach(function(s,i){$(s).value=S.frame[i]||'';});
+
+function wave(cyc,amp,col){var p='';for(var x=0;x<=200;x+=2){var y=40+Math.sin(x/200*cyc*Math.PI*2)*amp;p+=(x?'L':'M')+x+' '+y.toFixed(1);}return '<svg viewBox="0 0 200 80" width="100%" height="70" aria-hidden="true"><path d="'+p+'" fill="none" stroke="'+col+'" stroke-width="3"/></svg>';}
+var TQ=[
+ {q:['Nyna flicks a ruler with 20 cm sticking out, then with 8 cm sticking out. Which sound is higher?','Nyna bật thước thò ra 20 cm, rồi thò ra 8 cm. Lần nào kêu cao hơn?'],
+  a:[['8 cm','8 cm'],['20 cm','20 cm'],['They are the same','Như nhau']],ans:0,
+  r:[['The short part vibrates faster.','Phần ngắn rung nhanh hơn.'],['The short part is louder.','Phần ngắn kêu to hơn.'],['The long part moves more air.','Phần dài đẩy nhiều không khí hơn.']],rans:0},
+ {q:['Look at wave P and wave Q. Which sound has the higher pitch?','Nhìn sóng P và sóng Q. Âm nào cao hơn?'],pic:true,
+  a:[['P','P'],['Q','Q']],ans:0,
+  r:[['Its waves are closer together — more vibrations each second.','Sóng của nó sát nhau hơn — rung nhiều lần hơn mỗi giây.'],['Its waves are taller.','Sóng của nó cao hơn.'],['Its waves are shorter.','Sóng của nó thấp hơn.']],rans:0},
+ {q:['Nam says: "A louder sound is always a higher sound." Is Nam right?','Nam nói: «Âm càng to thì càng cao.» Nam nói đúng không?'],
+  a:[['Yes','Đúng'],['No','Sai']],ans:1,
+  r:[['Loudness is how BIG the vibration is; pitch is how FAST it is.','Độ to là rung MẠNH hay yếu; cao độ là rung NHANH hay chậm.'],['Loud sounds always come from small things.','Âm to luôn phát ra từ vật nhỏ.'],['Pitch and loudness are the same thing.','Cao độ và độ to là một.']],rans:0}
+];
+S.tq=S.tq||{};
+function renderTQ(){$('#tq').innerHTML=TQ.map(function(t,i){var st=S.tq[i]||{};var done=st.checked;
+  var h='<div class="card i18n"><button type="button" class="lang-toggle" aria-pressed="false" aria-label="Xem tiếng Việt">V</button><div class="kicker">Question '+(i+1)+' · two steps</div><h3 class="t" data-vi="'+t.q[1]+'">'+t.q[0]+'</h3>';
+  if(t.pic)h+='<div class="wavepair"><figure>'+wave(9,14,css('--berry'))+'P</figure><figure>'+wave(2.5,32,css('--sky'))+'Q</figure></div>';
+  h+='<div class="tier"><h4 class="t" data-vi="Bước 1 — Câu trả lời">Step 1 — Answer</h4><div class="choices">'+t.a.map(function(a,j){var c=st.a===j?'sel':'';if(done)c=j===t.ans?'right':(st.a===j?'wrong':'');return '<button type="button" class="choice '+c+'" data-tq="'+i+'" data-k="a" data-j="'+j+'" '+(done?'disabled':'')+'><span class="L">'+'ABC'[j]+'</span><span class="t" data-vi="'+a[1]+'">'+a[0]+'</span></button>';}).join('')+'</div></div>';
+  h+='<div class="tier"><h4 class="t" data-vi="Bước 2 — Vì sao?">Step 2 — Why?</h4><div class="choices">'+t.r.map(function(a,j){var c=st.r===j?'sel':'';if(done)c=j===t.rans?'right':(st.r===j?'wrong':'');return '<button type="button" class="choice '+c+'" data-tq="'+i+'" data-k="r" data-j="'+j+'" '+(done?'disabled':'')+'><span class="L">'+'abc'[j]+'</span><span class="t" data-vi="'+a[1]+'">'+a[0]+'</span></button>';}).join('')+'</div></div>';
+  if(!done)h+='<div class="row" style="margin-top:.7rem"><button type="button" class="btn" data-tqc="'+i+'" '+(st.a!=null&&st.r!=null?'':'disabled')+'>Check</button></div>';
+  else{var A=st.a===t.ans,R=st.r===t.rans;h+='<div class="fb '+(A&&R?'good':A?'info':'bad')+'" style="margin-top:.7rem">'+(A&&R?'Answer and reason both right — real understanding! Hiểu thật rồi!':A?'Right answer, but the reason is not right yet. Đúng đáp án nhưng lý do chưa đúng — xem lại bước 3 nhé.':'Not yet. Chưa đúng — thử lại máy âm thanh ở bước 3 rồi làm lại.')+'</div><div class="row" style="margin-top:.5rem"><button type="button" class="btn ghost" data-tqr="'+i+'">Try again</button></div>';}
+  return h+'</div>';}).join('');
+  $$('#tq .t').forEach(function(el){el.setAttribute('data-en',el.innerHTML);});}
+document.addEventListener('click',function(e){var b=e.target.closest('[data-tq]');if(b){var i=+b.dataset.tq;S.tq[i]=S.tq[i]||{};S.tq[i][b.dataset.k]=+b.dataset.j;save();renderTQ();return;}
+  b=e.target.closest('[data-tqc]');if(b){S.tq[+b.dataset.tqc].checked=true;save();renderTQ();if(TQ.every(function(t,i){var s=S.tq[i];return s&&s.checked&&s.a===t.ans&&s.r===t.rans;}))markDone(4);return;}
+  b=e.target.closest('[data-tqr]');if(b){S.tq[+b.dataset.tqr]={};save();renderTQ();}});
+renderTQ();
+
+/* ---------- step 5: nature ---------- */
+var NAT=[
+ ['mosquito','Mosquito','Con muỗi','≈ 400–700 Hz','A female mosquito beats her tiny wings hundreds of times every second. That fast flapping IS the whine you hear at night.','Muỗi cái đập đôi cánh bé xíu hàng trăm lần mỗi giây. Chính cú đập nhanh đó là tiếng «vo ve» con nghe ban đêm.'],
+ ['cicada','Cicada (ve sầu)','Ve sầu','≈ several thousand Hz','Hà Nội\'s summer song! A male cicada clicks a tiny drum-like plate on his body extremely fast to call females.','Bài hát mùa hè Hà Nội! Ve sầu đực làm rung một tấm màng nhỏ như mặt trống trên bụng cực nhanh để gọi bạn.'],
+ ['treefrog','Small tree frog','Nhái bén (ếch nhỏ)','high','After rain in the rice fields, small frogs call high and big frogs call low. Frogs can tell each other\'s size just by the pitch!','Sau mưa ngoài đồng, ếch nhái nhỏ kêu cao, ếch to kêu trầm. Chỉ cần nghe cao độ là chúng đoán được bạn mình to hay nhỏ!'],
+ ['bullfrog','Big bullfrog','Ếch ương lớn','low','A big body with big vocal cords vibrates slowly → a deep "rum-rum" that travels far across the pond.','Thân to, dây thanh to rung chậm → tiếng «ộp ộp» trầm, vang xa khắp ao.'],
+ ['elephant','Elephant','Con voi','below 20 Hz','Elephants talk with rumbles so LOW that human ears cannot hear them — but other elephants hear them from kilometres away. Press play: can you hear anything?','Voi «nói chuyện» bằng tiếng gầm trầm đến mức tai người không nghe được, nhưng voi khác nghe được từ cách xa nhiều cây số. Bấm nghe: con có nghe thấy gì không?'],
+ ['bat','Bat','Con dơi','above 20,000 Hz','Bats shout so HIGH that we cannot hear them. The echoes help them find insects in the dark. Press play: silence for you — a loud shout for a bat!','Dơi kêu CAO đến mức người không nghe được. Tiếng vọng giúp chúng tìm côn trùng trong bóng tối. Bấm nghe: con chẳng nghe gì — nhưng với dơi đó là tiếng hét!']
+];
+var ICO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 12h2M7 8v8M11 5v14M15 9v6M19 11v2"/></svg>';
+$('#nature').innerHTML=NAT.map(function(n){return '<div class="ncard"><div class="hd"><span class="ico">'+ICO+'</span><div><h3 class="t" data-vi="'+n[2]+'">'+n[1]+'</h3><div class="freq">'+n[3]+'</div></div></div><p class="t" data-vi="'+n[5].replace(/"/g,'&quot;')+'">'+n[4]+'</p><button type="button" class="btn play" data-play="'+n[0]+'" style="align-self:flex-start"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Listen</button></div>';}).join('');
+$$('#nature .t').forEach(function(el){el.setAttribute('data-en',el.innerHTML);});
+
+/* ---------- parent log ---------- */
+function renderParent(){var o=S.obs||{},tq=S.tq||{};var good=TQ.filter(function(t,i){var s=tq[i];return s&&s.checked&&s.a===t.ans&&s.r===t.rans;}).length;
+  var half=TQ.filter(function(t,i){var s=tq[i];return s&&s.checked&&s.a===t.ans&&s.r!==t.rans;}).length;
+  $('#parentLog').innerHTML='<h3>Kết quả của con</h3><ol class="steps-list">'+
+   '<li>Dự đoán ban đầu: <b>'+(S.pred?S.pred+' — '+PRED[S.pred][1]:'chưa làm')+'</b>'+(S.pred&&S.pred!=='B'?' (đoán sai lúc đầu là bình thường — quan trọng là con tự sửa ở bước 4)':'')+'</li>'+
+   '<li>Thí nghiệm thước: '+(o.short&&o.long?('thước ngắn → '+(o.short.shake==='fast'?'rung nhanh':'rung chậm')+', '+(o.short.sound==='high'?'âm cao':'âm trầm')):'chưa điền')+'</li>'+
+   '<li>Trò chơi đôi tai: '+(S.ear!=null?S.ear+'/5':'chưa chơi')+'</li>'+
+   '<li>Câu hỏi hai bước: <b>'+good+'/3</b> hiểu thật'+(half?', '+half+' câu đúng đáp án nhưng sai lý do (dấu hiệu học thuộc, chưa hiểu)':'')+'</li></ol>'+
+   '<div class="row" style="margin-top:.8rem"><button type="button" class="btn ghost" id="resetAll">Làm lại từ đầu</button></div>';
+  $('#resetAll').onclick=function(){S={};save();location.reload();};}
+
+if(S.step)go(S.step);
+})();
+</script>
+
+<script>if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){navigator.serviceWorker.register('sw.js').catch(function(){});}</script>
+</body>
+</html>
