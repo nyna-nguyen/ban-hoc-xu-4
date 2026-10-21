@@ -752,6 +752,38 @@
   }
   @media (max-width: 600px){ .xp-dial{grid-template-columns:1fr auto;} .xp-dial label{grid-column:1/-1;} }
   @media (prefers-reduced-motion: reduce){ .xp-chip.shake{animation:none;} }
+
+  /* compact header: line 1 = eyebrow + title + coins, line 2 = tabs */
+  .main .unit-topbar{padding:0.5rem 1.5rem 0.15rem;gap:0.75rem;flex-wrap:nowrap;justify-content:space-between;}
+  .main .unit-topbar > div:first-child{display:flex;align-items:baseline;gap:0.65rem;min-width:0;flex:1;}
+  .main .unit-topbar .eyebrow{display:inline;white-space:nowrap;font-size:0.68rem;flex:none;}
+  .main .unit-topbar h2{font-size:1.1rem;line-height:1.3;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+  .main .unit-topbar .coin-badge{flex:none;}
+  .main .tab-bar{padding:0 1.25rem;}
+  .main .tab-btn{padding:0.4rem 0.75rem;font-size:0.88rem;}
+  @media (max-width:600px){
+    .main .unit-topbar{padding:0.45rem 0.9rem 0.1rem;}
+    .main .unit-topbar .eyebrow{display:none;}
+    .main .tab-bar{padding:0 0.6rem;}
+  }
+
+  /* speaking state + stop pill */
+  .xp-say.is-speaking,.xp-btn.is-speaking{background:var(--rose,#B5475B)!important;color:#fff!important;border-color:transparent!important;}
+  .xp-say.is-speaking svg,.xp-btn.is-speaking svg{display:none;}
+  .xp-say.is-speaking::before,.xp-btn.is-speaking::before{content:'';width:12px;height:12px;border-radius:2px;background:currentColor;display:inline-block;}
+  .xp-saystop{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:9999;display:inline-flex;align-items:center;gap:0.55rem;padding:0.7rem 1.2rem;min-height:48px;border:0;border-radius:999px;background:#B5475B;color:#fff;font:600 0.95rem 'Fredoka',sans-serif;box-shadow:0 6px 20px rgba(0,0,0,0.25);cursor:pointer;}
+  .xp-saystop[hidden]{display:none;}
+  .xp-saystop .sq{width:12px;height:12px;border-radius:2px;background:#fff;}
+
+  /* pause / continue states */
+  .xp-btn.is-speaking > .i18n,.xp-btn.is-paused > .i18n{display:none;}
+  .xp-btn.is-speaking::after{content:'Pause · Dừng';}
+  .xp-btn.is-paused::after{content:'Continue · Đọc tiếp';}
+  .xp-say.is-paused,.xp-btn.is-paused{background:var(--gold,#C98A1B)!important;color:#fff!important;border-color:transparent!important;}
+  .xp-say.is-paused svg,.xp-btn.is-paused svg{display:none;}
+  .xp-say.is-paused::before,.xp-btn.is-paused::before{content:'';width:12px;height:13px;background:currentColor;clip-path:polygon(0 0,100% 50%,0 100%);display:inline-block;}
+  .xp-restart[hidden]{display:none;}
+  .xp-restart{min-height:40px;padding:0.4rem 0.8rem;}
 </style>
 
 <style>
@@ -1074,7 +1106,7 @@
     <div class="toc-top">
       <div class="toc-brand">
         <a class="home-link" href="Ban_hoc.html" title="Về Bàn học · Back to the desk"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5"/></svg>Bàn học</a><span class="eyebrow">Cambridge Primary Maths</span>
-        <h1>Stage 5</h1><div class="build-stamp">Bản dựng · 21/10/2026 22:09 (GMT+7)</div>
+        <h1>Stage 5</h1><div class="build-stamp">Bản dựng · 21/10/2026 22:25 (GMT+7)</div>
       </div>
       <button type="button" class="toc-toggle" id="toc-toggle" aria-expanded="true" aria-label="Collapse unit list">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -15634,7 +15666,42 @@
       if(m) m.innerHTML = key==='elephant' ? '🤫 Con không nghe thấy gì, đúng không? Âm này dưới 20 Hz, quá trầm cho tai người. <span class="xp-small">Too low for human ears.</span>' : '🤫 Im lặng hoàn toàn! Âm này trên 20.000 Hz, quá cao cho tai người. <span class="xp-small">Too high for human ears.</span>';
     }
   }
-  function xSay(w){ if(!window.speechSynthesis) return; var u = new SpeechSynthesisUtterance(w); u.lang='en-GB'; u.rate=0.85; var v = speechSynthesis.getVoices().filter(function(x){ return /^en-GB/i.test(x.lang); })[0]; if(v) u.voice=v; speechSynthesis.cancel(); speechSynthesis.speak(u); }
+  /* ---------- read aloud: sentence queue with pause / continue ---------- */
+  var XS = {btn:null, text:null, parts:null, idx:0, tok:0, t0:0, poll:null}, xSayPos = {};
+  function xSayPill(){ var p = document.getElementById('xp-saystop'); if(!p){ p = document.createElement('button'); p.type='button'; p.id='xp-saystop'; p.className='xp-saystop'; p.innerHTML='<span class="sq"></span>Tạm dừng · Pause'; p.hidden = true; p.addEventListener('click', function(){ xSayStop(); }); document.body.appendChild(p); } return p; }
+  function xSplit(w){ var out = []; String(w).split(/\n+/).forEach(function(line){ (line.match(/[^.!?…]+(?:[.!?…]+["”’)]*|$)\s*/g) || []).forEach(function(s){ s = s.trim(); if(s) out.push(s); }); }); return out.length ? out : [String(w)]; }
+  function xRestartBtn(btn){ return btn && btn.parentNode ? btn.parentNode.querySelector('.xp-restart') : null; }
+  function xMarkPaused(btn, on){ if(!btn) return; btn.classList.toggle('is-paused', !!on); var r = xRestartBtn(btn); if(r) r.hidden = !on; }
+  function xSayOff(){ if(XS.poll){ clearInterval(XS.poll); XS.poll = null; } if(XS.btn) XS.btn.classList.remove('is-speaking'); XS.btn = null; XS.text = null; XS.parts = null; XS.tok++; var p = document.getElementById('xp-saystop'); if(p) p.hidden = true; }
+  function xSayStop(){
+    if(XS.text && XS.parts && XS.parts.length > 1 && XS.idx < XS.parts.length){ xSayPos[XS.text] = XS.idx; xMarkPaused(XS.btn, true); }
+    try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
+    xSayOff();
+  }
+  function xSpeakPart(){
+    if(!XS.parts) return;
+    if(XS.idx >= XS.parts.length){ delete xSayPos[XS.text]; xMarkPaused(XS.btn, false); xSayOff(); return; }
+    var tok = ++XS.tok, done = false;
+    var u = new SpeechSynthesisUtterance(XS.parts[XS.idx]); u.lang='en-GB'; u.rate=0.85; var v = speechSynthesis.getVoices().filter(function(x){ return /^en-GB/i.test(x.lang); })[0]; if(v) u.voice=v;
+    function next(){ if(done || tok !== XS.tok) return; done = true; XS.idx++; xSpeakPart(); }
+    u.onend = next; u.onerror = function(ev){ if(ev && (ev.error==='interrupted' || ev.error==='canceled')) return; next(); };
+    XS.t0 = Date.now(); XS.next = next;
+    speechSynthesis.speak(u);
+  }
+  function xSay(w, btn, fromStart){
+    if(!window.speechSynthesis) return;
+    if(btn && btn === XS.btn){ xSayStop(); return; }
+    xSayStop();
+    var parts = xSplit(w), start = fromStart ? 0 : (xSayPos[w] || 0);
+    if(start >= parts.length) start = 0;
+    delete xSayPos[w]; xMarkPaused(btn, false);
+    XS.text = w; XS.parts = parts; XS.idx = start; XS.btn = btn || null;
+    if(btn) btn.classList.add('is-speaking');
+    xSayPill().hidden = false;
+    xSpeakPart();
+    XS.poll = setInterval(function(){ if(XS.parts && Date.now() - XS.t0 > 900 && !speechSynthesis.speaking && !speechSynthesis.pending && XS.next) XS.next(); }, 400);
+  }
+
 
   /* ---------- page ---------- */
   var XPC = (typeof XP_CFG!=='undefined') ? XP_CFG : {};
@@ -15643,7 +15710,7 @@
   function K(k, d){ return XK[k] || d; }
   function SAYBTN(txt){ return '<button type="button" class="xp-say" data-xsay="'+xe(String(txt).replace(/<[^>]+>/g,''))+'" aria-label="Read aloud">'+SAY_I+'</button>'; }
   var xpUid = null, xpRaf = null, xpSim = null;
-  function xpStop(){ if(xpRaf){ cancelAnimationFrame(xpRaf); xpRaf = null; } xStop(); if(xpSim && xpSim.stop) xpSim.stop(); }
+  function xpStop(){ if(xpRaf){ cancelAnimationFrame(xpRaf); xpRaf = null; } xStop(); xSayStop(); if(xpSim && xpSim.stop) xpSim.stop(); }
 
   function renderExplore(uid){
     var root = document.getElementById('explore-root'); if(!root) return;
@@ -15692,7 +15759,7 @@
     var items = '<div class="xp-grid">'+m.items.map(function(it){
       return '<div class="xp-item"><span class="xp-emoji">'+it.emoji+'</span><div style="flex:1;min-width:0">'+T(it.name,'b')+(it.sub?T(it.sub,'small'):'')+'</div>'+(it.sound?'<button type="button" class="xp-btn play" data-xplay="'+it.sound+'">'+PLAY_I+T(['Listen','Nghe'])+'</button>':'')+(it.say?SAYBTN(it.say):'')+'</div>';
     }).join('')+'</div>';
-    var txt = m.text ? '<div class="xp-read"><div class="xp-row" style="justify-content:space-between"><b>'+T(['Read','Đọc'])+'</b><button type="button" class="xp-btn play" data-xsay="'+xe(m.text[0].replace(/<[^>]+>/g,''))+'">'+SAY_I+T(['Read aloud','Nghe đọc'])+'</button></div>'+T(m.text,'div')+'</div>' : '';
+    var txt = m.text ? '<div class="xp-read"><div class="xp-row" style="justify-content:space-between"><b>'+T(['Read','Đọc'])+'</b><span class="xp-row" style="gap:0.4rem"><button type="button" class="xp-btn play" data-xsay="'+xe(m.text[0].replace(/<[^>]+>/g,''))+'">'+SAY_I+T(['Read aloud','Nghe đọc'])+'</button><button type="button" class="xp-btn ghost xp-restart" data-xrestart="1" hidden>↺ '+T(['From the start','Đọc từ đầu'])+'</button></span></div>'+T(m.text,'div')+'</div>' : '';
     h += CARD(HEAD(K('mystery',['The mystery','Câu đố bí ẩn']), m.q)+T(m.intro,'p')+txt+items);
     h += CARD(HEAD(null, K('predQ',['What is your guess?','Con đoán thế nào?']))+'<div class="xp-choices" id="xp-pred">'+xpPerm(m.options.length, D.id+'m').map(function(i,pos){
       return '<button type="button" class="xp-choice" data-xpred="'+i+'"><span class="L">'+'ABCD'[pos]+'</span>'+T(m.options[i])+'</button>'; }).join('')+'</div>'+
@@ -16275,7 +16342,8 @@
     if((b = e.target.closest('[data-xs]'))) return xpGo(+b.dataset.xs);
     if((b = e.target.closest('[data-xgo]'))) return xpGo(+b.dataset.xgo);
     if((b = e.target.closest('[data-xplay]'))) return xPlay(b.dataset.xplay, b.closest('.xp-ncard, .xp-item'));
-    if((b = e.target.closest('[data-xsay]'))) return xSay(b.dataset.xsay);
+    if((b = e.target.closest('[data-xrestart]'))){ var sb = b.parentNode.querySelector('[data-xsay]'); if(sb){ if(XS.btn===sb){ XS.btn.classList.remove('is-speaking'); XS.btn=null; } xSay(sb.dataset.xsay, sb, true); } return; }
+    if((b = e.target.closest('[data-xsay]'))) return xSay(b.dataset.xsay, b);
     if((b = e.target.closest('[data-xpred]'))){ S.pred = +b.dataset.xpred; xpSave(); xpPaintPred(D); xpDone(1); return; }
     if((b = e.target.closest('[data-xobs]'))){ S.obs = S.obs || {}; S.obs[b.dataset.xobs] = +b.dataset.v; xpSave(); xpRenderObs(D); return; }
     if(e.target.closest('#xp-fcheck')) return xpCheckFrame(D);
