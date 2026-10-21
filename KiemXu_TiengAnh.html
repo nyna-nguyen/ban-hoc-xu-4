@@ -228,7 +228,7 @@ let G={coins:START,p:{},log:[]};
 try{const g=JSON.parse(localStorage.getItem(KEY_G)||'null');if(g&&typeof g.coins==='number'){G=g;G.log=G.log||[];}}catch(e){}
 const pend={};
 const parentPeek=new Set(),pwPend=new Set(),pwErr=new Set();
-function pwOk(v){try{return btoa(v)==='ZUBzeTIwMjY=';}catch(e){return false;}}
+function pwOk(v){try{return btoa(v)==='RWFzeUAyMDI2';}catch(e){return false;}}
 const LOCK_I='<svg class="lk" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="11" width="15" height="9.5" rx="2"/><path d="M8.5 11V7.5a3.5 3.5 0 0 1 7 0V11"/></svg>';
 const UNLOCK_I='<svg class="lk lk-open" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="11" width="15" height="9.5" rx="2"/><path d="M16 11V6.5a3.5 3.5 0 0 0-6.6-1.6"/></svg>';
 function ppwRow(r){return `<div class="confirm ppw-row"><span>${LOCK_I} Chỉ phụ huynh:</span><input class="ppwi" id="ppw-${esc(r.id)}" type="password" placeholder="Mật khẩu" autocomplete="off"><button type="button" class="btn" data-ppwgo="1">Mở</button><button type="button" class="btn ghost" data-ppwno="1">Thôi</button></div>`;}

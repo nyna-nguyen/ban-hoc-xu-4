@@ -62,6 +62,26 @@
   .ict{--accent:var(--gold);--tint:var(--gold-tint);}
   .kiemxu{--accent:#33736B;--tint:#D8EAE7;}
   @media (prefers-color-scheme: dark){ .kiemxu{--accent:#7FC4BA;--tint:#1C302D;} }
+
+  .reward{width:100%;max-width:1100px;margin:0 0 1.4rem;background:var(--paper-alt);border:1.5px solid var(--line);border-radius:18px;padding:1rem 1.15rem;display:flex;flex-direction:column;gap:0.8rem;}
+  .rw-top{display:flex;flex-wrap:wrap;align-items:center;gap:0.8rem 1.2rem;}
+  .rw-stats{display:flex;flex-wrap:wrap;gap:0.6rem;flex:1;}
+  .rw-stat{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:0.55rem 0.95rem;min-width:140px;flex:1;}
+  .rw-stat b{display:block;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.6rem;line-height:1.1;color:var(--gold);font-variant-numeric:tabular-nums;}
+  .rw-stat.gift b{color:var(--berry);}
+  .rw-stat.left b{color:var(--moss-deep);}
+  .rw-stat span{font-size:0.78rem;color:var(--ink-soft);}
+  .rw-btn{font-family:'Fredoka',sans-serif;font-weight:600;font-size:0.9rem;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:0.45rem 1rem;cursor:pointer;min-height:42px;display:inline-flex;align-items:center;gap:0.4rem;}
+  .rw-btn.main{background:var(--moss);border-color:var(--moss);color:var(--paper);}
+  .rw-btn svg{width:16px;height:16px;}
+  .rw-edit{display:flex;flex-wrap:wrap;align-items:center;gap:0.6rem;background:var(--gold-tint);border:1px solid var(--gold);border-radius:13px;padding:0.7rem 0.9rem;}
+  .rw-edit label{font-weight:600;font-size:0.9rem;}
+  .rw-in{font:inherit;font-size:1rem;padding:0.45rem 0.7rem;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);width:150px;}
+  .rw-msg{font-size:0.88rem;font-weight:600;}
+  .rw-msg.bad{color:var(--berry);} .rw-msg.ok{color:var(--moss-deep);}
+  .rw-hist{font-size:0.85rem;color:var(--ink-soft);}
+  .rw-hist summary{cursor:pointer;font-weight:600;}
+  .rw-hist ul{margin:0.4rem 0 0;padding-left:1.1rem;}
   .foot{margin-top:2rem;font-size:0.78rem;color:var(--ink-soft);text-align:center;max-width:620px;}
   .build-stamp{display:block;margin-top:0.4rem;opacity:0.7;font-variant-numeric:tabular-nums;}
   @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
@@ -70,6 +90,19 @@
 <p class="eyebrow">Cambridge · N / NKBN</p>
 <h1>Bàn học của Nyna 🌱</h1>
 <p class="greet" id="greet">Hôm nay con muốn học môn nào?</p>
+
+<section class="reward" id="reward" aria-label="Xu đã thưởng">
+  <div class="rw-top">
+    <div class="rw-stats">
+      <div class="rw-stat"><b id="rw-earned">0</b><span>Tổng xu con đã kiếm (6 môn)</span></div>
+      <div class="rw-stat gift"><b id="rw-given">0</b><span>Đã thưởng (bố đổi quà)</span></div>
+      <div class="rw-stat left"><b id="rw-left">0</b><span>Con còn lại</span></div>
+    </div>
+    <button type="button" class="rw-btn" id="rw-open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="11" width="15" height="9.5" rx="2"/><path d="M8.5 11V7.5a3.5 3.5 0 0 1 7 0V11"/></svg>Bố sửa</button>
+  </div>
+  <div id="rw-box"></div>
+  <details class="rw-hist" id="rw-hist" hidden><summary>Lịch sử thưởng</summary><ul id="rw-list"></ul></details>
+</section>
 
 <div class="desk">
   <a class="subject math" href="Math_Xu_4.html" data-subj="math">
@@ -122,7 +155,7 @@
   </a>
 </div>
 
-<p class="foot">Số coin của từng môn nằm ngay trên thẻ — làm bài đúng trong môn nào là coin môn đó tăng. Đặt file này cùng thư mục với 4 file môn học, <b>KiemXu.html</b> và <b>KiemXu_TiengAnh.html</b>. <span class="build-stamp">Bản dựng · 11/10/2026 19:09 (GMT+7)</span></p>
+<p class="foot">Số coin của từng môn nằm ngay trên thẻ — làm bài đúng trong môn nào là coin môn đó tăng. Đặt file này cùng thư mục với 4 file môn học, <b>KiemXu.html</b> và <b>KiemXu_TiengAnh.html</b>. <span class="build-stamp">Bản dựng · 21/10/2026 15:47 (GMT+7)</span></p>
 
 <script>
 (function(){
@@ -157,6 +190,73 @@
     var el = document.querySelector('[data-subj="' + k + '"] .coin-n');
     if(el) el.textContent = COINS[k];
   });
+
+  /* ---------- Đã thưởng xu (bố đổi quà) ---------- */
+  var RW_KEY = 'banhoc-rewards-v1';
+  var APPS = [
+    {k:'math', key:'xuxu-math-coins', t:'c'}, {k:'science', key:'xuxu-science5-coins', t:'c'},
+    {k:'esl', key:'xuxu-esl5-coins', t:'c'}, {k:'ict', key:'xuxu-ict-coins', t:'c'},
+    {k:'kiemxu', key:'khode-game-v4', t:'g'}, {k:'kiemxu-en', key:'kiemxu-en-game-v1', t:'g'}
+  ];
+  function rwLoad(){ try{ var r = JSON.parse(localStorage.getItem(RW_KEY)||'null'); if(r && typeof r.total==='number'){ r.entries = r.entries||[]; return r; } }catch(e){} return {total:0, entries:[]}; }
+  function rwSave(r){ try{ localStorage.setItem(RW_KEY, JSON.stringify(r)); }catch(e){} }
+  function appObj(a){ var o=null; try{ o = JSON.parse(localStorage.getItem(a.key)||'null'); }catch(e){}
+    if(!o || typeof o.coins!=='number') o = a.t==='c' ? {coins:50, judged:{}, log:[]} : {coins:50, p:{}, log:[]};
+    o.log = o.log || []; return o; }
+  function appBal(a){ return appObj(a).coins; }
+  function appAdd(a, d){ var o = appObj(a); o.coins += d; var txt = d<0 ? ('Bố thưởng (đổi quà) · ' + (-d) + ' xu') : ('Bố hoàn lại xu thưởng · ' + d + ' xu');
+    if(a.t==='c') o.log.push({t:Date.now(), delta:d, coins:o.coins, txt:txt});
+    else o.log.push({t:Date.now(), id:'', unit:'', kind:'reward', detail:txt, delta:d, coins:o.coins});
+    try{ localStorage.setItem(a.key, JSON.stringify(o)); }catch(e){} }
+  function pwOk(v){ try{ return btoa(v)==='RWFzeUAyMDI2'; }catch(e){ return false; } }
+  var rwUnlocked = false;
+  function sum(){ return APPS.reduce(function(s,a){ return s + Math.max(0, appBal(a)); }, 0); }
+  function paintCards(){ APPS.forEach(function(a){ var el = document.querySelector('[data-subj="'+a.k+'"] .coin-n'); if(el) el.textContent = appBal(a); }); }
+  function rwPaint(){
+    var r = rwLoad(), left = sum();
+    document.getElementById('rw-earned').textContent = left + r.total;
+    document.getElementById('rw-given').textContent = r.total;
+    document.getElementById('rw-left').textContent = left;
+    var h = document.getElementById('rw-hist'), ul = document.getElementById('rw-list');
+    h.hidden = !r.entries.length;
+    ul.innerHTML = r.entries.slice().reverse().map(function(e){ var d = new Date(e.t); function p(x){ return (x<10?'0':'')+x; }
+      return '<li>' + p(d.getDate())+'/'+p(d.getMonth()+1)+'/'+d.getFullYear()+' '+p(d.getHours())+':'+p(d.getMinutes()) + ' — ' + (e.amt>0 ? 'thưởng thêm <b>'+e.amt+'</b> xu' : 'bớt lại <b>'+(-e.amt)+'</b> xu') + '</li>'; }).join('');
+    paintCards();
+  }
+  function rwBox(html){ document.getElementById('rw-box').innerHTML = html; }
+  function rwAsk(msg){
+    rwBox('<div class="rw-edit"><label for="rw-pw">Chỉ bố mẹ:</label><input class="rw-in" id="rw-pw" type="password" placeholder="Mật khẩu" autocomplete="off"><button type="button" class="rw-btn main" id="rw-pwgo">Mở</button><button type="button" class="rw-btn" id="rw-cancel">Thôi</button>'+(msg?'<span class="rw-msg bad">'+msg+'</span>':'')+'</div>');
+    var f = document.getElementById('rw-pw'); if(f) f.focus();
+  }
+  function rwEdit(msg, ok){
+    var r = rwLoad();
+    rwBox('<div class="rw-edit"><label for="rw-val">Tổng xu đã thưởng:</label><input class="rw-in" id="rw-val" type="text" inputmode="numeric" value="'+r.total+'"><button type="button" class="rw-btn main" id="rw-save">Lưu</button><button type="button" class="rw-btn" id="rw-cancel">Đóng</button>'+
+      (msg?'<span class="rw-msg '+(ok?'ok':'bad')+'">'+msg+'</span>':'<span class="rw-msg" style="color:var(--ink-soft);font-weight:500">Ví dụ: đang 0, con đổi quà 50 xu → sửa thành 50. Lần sau đổi thêm 30 → sửa thành 80.</span>')+'</div>');
+  }
+  function rwApply(newTotal){
+    var r = rwLoad(), delta = newTotal - r.total;
+    if(!delta) return rwEdit('Không có gì thay đổi.', true);
+    var alloc = {};
+    if(delta > 0){
+      var have = sum(); if(delta > have) return rwEdit('Con chỉ còn ' + have + ' xu, không đủ để thưởng thêm ' + delta + ' xu.', false);
+      var need = delta, order = APPS.slice().sort(function(a,b){ return appBal(b) - appBal(a); });
+      order.forEach(function(a){ if(need<=0) return; var take = Math.min(Math.max(0, appBal(a)), need); if(take>0){ appAdd(a, -take); alloc[a.k] = -take; need -= take; } });
+    } else {
+      var back = -delta;
+      for(var i=r.entries.length-1; i>=0 && back>0; i--){ var e = r.entries[i]; Object.keys(e.alloc||{}).forEach(function(k){ if(back<=0) return; var given = -e.alloc[k] - (e.refunded && e.refunded[k] || 0); if(given<=0) return; var g = Math.min(given, back); var a = APPS.filter(function(x){ return x.k===k; })[0]; if(!a) return; appAdd(a, g); alloc[k] = (alloc[k]||0) + g; e.refunded = e.refunded||{}; e.refunded[k] = (e.refunded[k]||0) + g; back -= g; }); }
+    }
+    r.total = newTotal; r.entries.push({t:Date.now(), amt:delta, alloc:alloc}); rwSave(r); rwPaint();
+    rwEdit(delta>0 ? 'Đã trừ ' + delta + ' xu. Con còn ' + sum() + ' xu.' : 'Đã hoàn lại ' + (-delta) + ' xu. Con còn ' + sum() + ' xu.', true);
+  }
+  document.getElementById('reward').addEventListener('click', function(e){
+    var b = e.target.closest('button'); if(!b) return;
+    if(b.id==='rw-open'){ if(rwUnlocked) rwEdit(); else rwAsk(); }
+    else if(b.id==='rw-cancel'){ rwBox(''); }
+    else if(b.id==='rw-pwgo'){ var v = document.getElementById('rw-pw').value; if(pwOk(v)){ rwUnlocked = true; rwEdit(); } else rwAsk('Sai mật khẩu.'); }
+    else if(b.id==='rw-save'){ var raw = document.getElementById('rw-val').value.replace(/[^0-9]/g,''); if(raw===''){ return rwEdit('Nhập một số xu, ví dụ 50.', false); } rwApply(parseInt(raw,10)); }
+  });
+  document.getElementById('reward').addEventListener('keydown', function(e){ if(e.key!=='Enter') return; if(e.target.id==='rw-pw'){ e.preventDefault(); document.getElementById('rw-pwgo').click(); } if(e.target.id==='rw-val'){ e.preventDefault(); document.getElementById('rw-save').click(); } });
+  rwPaint();
   var h = new Date().getHours();
   var g = h < 11 ? 'Chào buổi sáng' : h < 14 ? 'Chào buổi trưa' : h < 18 ? 'Chào buổi chiều' : 'Chào buổi tối';
   document.getElementById('greet').textContent = g + ', Nyna! Hôm nay con muốn học môn nào?';
